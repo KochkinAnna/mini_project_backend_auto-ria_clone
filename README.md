@@ -31,9 +31,10 @@ The backend supports authentication using JWT (JSON Web Tokens). When a user log
 
 ----
 ## Authorization and Role-based Access Control
-The backend includes role-based access control, with four roles: __buyer__, __seller__, __manager__, and __admin__. The roles are defined in the __role__ table in the database. A user can have multiple roles.
+The backend includes role-based access control, with four main roles: __buyer__, __seller__, __manager__, and __admin__. The roles are defined in the __role__ table in the database. A user can have multiple roles.
 
 The backend also includes middleware for checking the user's role and permissions on each request. For example, only __seller__ and __admin__ users can create new listings.
+<p>There are also roles for car dealerships.</p>
 
 ----
 ## Premium Accounts
