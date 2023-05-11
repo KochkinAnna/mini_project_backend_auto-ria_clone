@@ -7,7 +7,6 @@ module.exports = {
   plugins: [
     '@typescript-eslint/eslint-plugin',
     'simple-import-sort',
-    'import',
   ],
   extends: [
     "plugin:prettier/recommended",
@@ -29,9 +28,9 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     "simple-import-sort/imports": "error",
-    "import/first": "error",
-    "import/newline-after-import": ["error", { "count": 1 }],
-    "import/no-duplicates": "error",
+    // "import/first": "error",
+    // "import/newline-after-import": ["error", { "count": 1 }],
+    // "import/no-duplicates": "error",
     'no-console': 'warn',
     'sort-imports': ['error', {
       'ignoreCase': true,
