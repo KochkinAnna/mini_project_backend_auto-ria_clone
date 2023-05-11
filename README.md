@@ -45,6 +45,7 @@ The backend supports two types of user accounts: basic and premium. Premium acco
 * __Admin:__ a superuser who can do everything. Only the customer and its partners will have this role.
 * __Auth:__ contains functions necessary for user authorization, such as registration, logging in, logging out, password recovery, etc.
 * __Buyer:__ "walks" on the platform, can contact an individual seller or car dealership
+* __Car:__ contains methods for creating, editing, and deleting cars.
 * __Cardealership:__ is responsible for creating, editing, and deleting car dealerships on the platform. In addition, you can also display a list of all available car dealerships and details of each of them.
 * __Cardealership-admin:__ managing the administrative tasks within the dealership, such as customer service, finance, and inventory management.
 * __Cardealership-manager:__ managing the sales team and ensuring sales targets are met. They are also responsible for building relationships with customers and ensuring customer satisfaction. 
