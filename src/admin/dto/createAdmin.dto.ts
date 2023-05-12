@@ -1,60 +1,85 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsOptional,
+  IsPhoneNumber,
   IsString,
   Matches,
-  MaxLength,
   MinLength,
 } from 'class-validator';
 
+import { NoProfanity } from '../../decorator/noProfanity.decorator';
 import { UserRole } from '../../enum/user-role.enum';
+import { COMPANY_REGEX } from '../../regex/company.regex';
+import { FIRSTNAME_REGEX } from '../../regex/firstName.regex';
+import { LASTNAME_REGEX } from '../../regex/lastName.regex';
+import { PASSWORD_REGEX } from '../../regex/password.regex';
+import { POSITION_REGEX } from '../../regex/position.regex';
 
 export class CreateAdminDto {
   @ApiProperty({ required: false, example: 'admin@somecompany.com' })
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @IsEmail()
-  email?: string;
+  email: string;
 
   @ApiProperty({ required: false, example: 'MyPassw0rd!_' })
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
-  @MaxLength(20)
-  @Matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
+  @Matches(PASSWORD_REGEX, {
     message:
-      'The password must contain at least one uppercase and lowercase letter, one digit, one special character, and its length must be at least 8 characters',
+      'Invalid input. The password must contain at least one uppercase and lowercase letter, one digit, one special character, and its length must be at least 8 characters',
   })
   password: string;
 
   @ApiProperty({ required: true, example: 'Evgeniy' })
   @IsNotEmpty()
   @IsString()
+  @Matches(FIRSTNAME_REGEX, {
+    message:
+      'Invalid input. First name must contain at least 2 characters and only letters, spaces, hyphens, apostrophes, and Cyrillic characters are allowed',
+  })
+  @NoProfanity()
   firstName: string;
 
   @ApiProperty({ required: false, example: 'Kochkin' })
   @IsOptional()
   @IsString()
+  @Matches(LASTNAME_REGEX, {
+    message:
+      'Invalid input. Last name must contain at least 2 characters and only letters, spaces, hyphens, apostrophes, and Cyrillic characters are allowed',
+  })
+  @NoProfanity()
   lastName?: string;
 
   @ApiProperty({ required: true, example: 'SomeCompany' })
   @IsNotEmpty()
   @IsString()
+  @Matches(COMPANY_REGEX, {
+    message:
+      'Invalid input. Company name should be SomeCompany or its partners',
+  })
   company: string;
 
   @ApiProperty({ enum: UserRole })
+  @IsNotEmpty()
   role: UserRole;
 
   @ApiProperty({ required: false, example: '+380500554471' })
   @IsOptional()
   @IsString()
-  phone: string;
+  @IsPhoneNumber()
+  phone?: string;
 
   @ApiProperty({ required: true, example: 'CEO' })
   @IsNotEmpty()
   @IsString()
+  @Matches(POSITION_REGEX, {
+    message:
+      'Invalid input. Position must contain at least 2 characters and only letters, spaces, hyphens, apostrophes, and Cyrillic characters are allowed',
+  })
+  @NoProfanity()
   position: string;
 }
