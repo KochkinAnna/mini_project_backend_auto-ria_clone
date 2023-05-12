@@ -29,6 +29,26 @@ To get started with the backend, you will need to have Node.js and npm installed
 5. Navigate to `http://localhost:3000` in your browser to view the application.
 
 ----
+## Migration database
+The project has a migration.sql file, which means that the database has already been generated, and you need to run SQL queries from this file to create a database schema.
+To run the migration, you can use any convenient way to execute SQL queries, such as the command line or a database program such as MySQL Workbench or pgAdmin.
+
+If you are working with PostgreSQL, you can use the command line and the psql command to execute SQL queries from the migration file. For example:
+
+Copy code
+`psql -U username -d database_name -f migration.sql`
+where username is the database user, database_name is the database name, and migration.sql is the path to the migration file.
+
+If you are working with MySQL, you can use the mysql command to execute SQL queries from the migration file. For example:
+
+Copy code
+`mysql -u username -p database_name < migration.sql`
+where username is the database user, database_name is the database name, and migration.sql is the path to the migration file.
+
+After executing SQL queries from the migration file, the database will be updated to the appropriate version, and you can start interacting with it through your application.
+
+----
+
 ## Authentication
 The backend supports authentication using JWT (JSON Web Tokens). When a user logs in or signs up, a JWT is generated and sent to the client. The client can then include the JWT in the __Authorization__ header of subsequent requests to authenticate the user.
 
