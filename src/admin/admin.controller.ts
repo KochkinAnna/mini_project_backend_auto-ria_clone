@@ -1,48 +1,121 @@
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Patch,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 
+import { AdminService } from './admin.service';
+import { CreateAdminDto } from './dto/createAdmin.dto';
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('Admin')
 @Controller('admin')
 export class AdminController {
+  constructor(private readonly adminService: AdminService) {}
+
   @Get()
   async getAdminsList() {}
 
-  @Get()
-  async getSellersList() {}
+  @Get('/buyer')
+  async getBuyerList() {}
 
-  @Get()
-  async getBuyersList() {}
+  @Get('/car')
+  async getCarList() {}
 
-  @Get()
-  async getCarsList() {}
+  @Get('/cardealership')
+  async getCardealershipList() {}
 
-  @Get()
-  async getCardealershipsList() {}
+  @Get('/cardealershipAdmin')
+  async getCardealershipAdminList() {}
 
-  @Get()
-  async getCardealershipAdminsList() {}
+  @Get('/cardealershipManager')
+  async getCardealershipManagerList() {}
 
-  @Get()
-  async getCardealershipManagersList() {}
+  @Get('/cardealershipMechanic')
+  async getCardealershipMechanicList() {}
 
-  @Get()
-  async getCardealershipMechanicsList() {}
-
-  @Get()
+  @Get('/cardealershipSales')
   async getCardealershipSalesList() {}
 
-  @Get()
-  async getCardealershipServiceManagersList() {}
+  @Get('/cardealershipServiceManager')
+  async getCardealershipServiceManagerList() {}
 
-  @Get()
-  async getCardealershipManagers() {}
+  @Get('/manager')
+  async getManagerList() {}
 
-  @Get()
-  async getCardealershipSellersList() {}
+  @Get('/seller')
+  async getSellerList() {}
 
-  @Get()
-  async getCardealershipSellersPremiumList() {}
+  @Get('/sellerPremium')
+  async getSellerPremiumList() {}
+
+  @Get('/:idAdmin')
+  async getAdmin() {}
+
+  @Get('/buyer/:idBuyer')
+  async getBuyer() {}
+
+  @Get('/car/:idCar')
+  async getCar() {}
+
+  @Get('/carSeller/:idCarSeller')
+  async getCarSeller() {}
+
+  @Get('/carSellerPremium/:idCarSellerPremium')
+  async getCarSellerPremium() {}
+
+  @Get('/carCardealershipAdmin/:idCarCardealershipAdmin')
+  async getCarCardealershipAdmin() {}
+
+  @Get('/carCardealershipManager/:idCarCardealershipManager')
+  async getCarCardealershipManager() {}
+
+  @Get('/carCardealershipSales/:idCarCardealershipSales')
+  async getCarCardealershipSales() {}
+
+  @Get('/cardealership/:idCardealership')
+  async getCardealership() {}
+
+  @Get('/cardealershipAdmin/:idCardealershipAdmin')
+  async getCardealershipAdmin() {}
+
+  @Get('/cardealershipManager/:idCardealershipManager')
+  async getCardealershipManager() {}
+
+  @Get('/cardealershipMechanic/:idCardealershipMechanic')
+  async getCardealershipMechanic() {}
+
+  @Get('/cardealershipSales/:idCardealershipSales')
+  async getCardealershipSales() {}
+
+  @Get('/cardealershipServiceManager/:idCardealershipServiceManager')
+  async getCardealershipServiceManager() {}
+
+  @Get('/manager/:idManager')
+  async getManager() {}
+
+  @Get('/seller/:idSeller')
+  async getSeller() {}
+
+  @Get('/sellerPremium/:idSellerPremium')
+  async getSellerPremium() {}
 
   @Post()
-  async createAdmin() {}
+  async createAdmin(
+    @Req() req: any,
+    @Body() body: CreateAdminDto,
+    @Res() res: any,
+  ) {
+    return res
+      .status(HttpStatus.CREATED)
+      .json(await this.adminService.createAdmin(body));
+  }
 
   @Post('/buyer')
   async createBuyer() {}
@@ -68,19 +141,19 @@ export class AdminController {
   @Post('/cardealership')
   async createCardealership() {}
 
-  @Post('/cardealership-admin')
+  @Post('/cardealershipAdmin')
   async createCardealershipAdmin() {}
 
-  @Post('/cardealership-manager')
+  @Post('/cardealershipManager')
   async createCardealershipManager() {}
 
-  @Post('/cardealership-mechanic')
+  @Post('/cardealershipMechanic')
   async createCardealershipMechanic() {}
 
-  @Post('/cardealership-sales')
+  @Post('/cardealershipSales')
   async createCardealershipSales() {}
 
-  @Post('/cardealership-service-manager')
+  @Post('/cardealershipServiceManager')
   async createCardealershipServiceManager() {}
 
   @Post('/manager')
