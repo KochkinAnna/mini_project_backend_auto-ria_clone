@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// The Role enum
+enum UserRole {
+  ADMIN
+  BUYER
+  CARDEALERSHIP_ADMIN
+  CARDEALERSHIP_MANAGER
+  CARDEALERSHIP_MECHANIC
+  CARDEALERSHIP_SALES
+  CARDEALERSHIP_SERVICE_MANAGER
+  MANAGER
+  SELLER
+  SELLER_PREMIUM
+}
+
+// The Car-status enum
+enum AdStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SOLD
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  password    String
+  firstName   String
+  lastName    String?
+  avatar      String?
+  role        UserRole @default(BUYER)
+  phoneNumber String
+  buyer       Buyer?
+  seller      Seller?
+  admin       Admin?
+  manager     Manager?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [adminId], references: [id])
+  adminId   Int      @unique
+  company   String
+  position  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Manager {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [managerId], references: [id])
+  managerId Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Buyer {
+  id      Int  @id @default(autoincrement())
+  user    User @relation(fields: [buyerId], references: [id])
+  buyerId Int  @unique
+}
+
+model Seller {
+  id            Int            @id @default(autoincrement())
+  user          User           @relation(fields: [userId], references: [id])
+  userId        Int            @unique
+  cars          Car[]          @relation("SellerCars")
+  premiumSeller PremiumSeller?
+  Car           Car?
+}
+
+model PremiumSeller {
+  id                  Int    @id @default(autoincrement())
+  user                Seller @relation(fields: [sellerId], references: [id])
+  sellerId            Int    @unique
+  cars                Car[]
+  views               Int    @default(0)
+  viewsPerDay         Int?
+  viewsPerWeek        Int?
+  viewsPerMonth       Int?
+  averagePriceRegion  Float?
+  averagePriceUkraine Float?
+}
+
+model Car {
+  id                   Int                 @id @default(autoincrement())
+  owner                Seller              @relation(fields: [ownerId], references: [id])
+  ownerId              Int                 @unique
+  brand                String
+  model                String
+  year                 Int
+  mileage              Float
+  price                Float
+  currency             String
+  description          String?
+  image                String
+  status               AdStatus            @default(PENDING)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  checkedByAdmin       Boolean             @default(false)
+  checkedAt            DateTime?
+  views                Int                 @default(0)
+  seller               Seller              @relation("SellerCars", fields: [sellerId], references: [id])
+  sellerId             Int                 @unique
+  premiumSeller        PremiumSeller?      @relation(fields: [premiumSellerId], references: [id])
+  premiumSellerId      Int                 @unique
+  CardealershipSales   CardealershipSales? @relation(fields: [cardealershipSalesId], references: [id])
+  cardealershipSalesId Int?
+
+  @@index([ownerId], name: "ownerId")
+}
+
+model Cardealership {
+  id              Int                           @id @default(autoincrement())
+  name            String
+  address         String
+  phoneNumber     String
+  email           String
+  websiteUrl      String?
+  admins          CardealershipAdmin[]
+  managers        CardealershipManager[]
+  mechanics       CardealershipMechanic[]
+  salespeople     CardealershipSales[]
+  serviceManagers CardealershipServiceManager[]
+  createdAt       DateTime                      @default(now())
+  updatedAt       DateTime                      @updatedAt
+}
+
+model CardealershipAdmin {
+  id              Int           @id @default(autoincrement())
+  firstName       String
+  lastName        String?
+  phoneNumber     String
+  email           String
+  cardealership   Cardealership @relation(fields: [cardealershipId], references: [id])
+  cardealershipId Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model CardealershipManager {
+  id              Int           @id @default(autoincrement())
+  firstName       String
+  lastName        String?
+  phoneNumber     String
+  email           String
+  cardealership   Cardealership @relation(fields: [cardealershipId], references: [id])
+  cardealershipId Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model CardealershipMechanic {
+  id              Int           @id @default(autoincrement())
+  firstName       String
+  lastName        String?
+  phoneNumber     String
+  email           String?
+  cardealership   Cardealership @relation(fields: [cardealershipId], references: [id])
+  cardealershipId Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model CardealershipSales {
+  id              Int           @id @default(autoincrement())
+  firstName       String
+  lastName        String?
+  phoneNumber     String
+  email           String
+  cardealership   Cardealership @relation(fields: [cardealershipId], references: [id])
+  cardealershipId Int
+  car             Car[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model CardealershipServiceManager {
+  id              Int           @id @default(autoincrement())
+  firstName       String
+  lastName        String?
+  phoneNumber     String
+  email           String?
+  cardealership   Cardealership @relation(fields: [cardealershipId], references: [id])
+  cardealershipId Int
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}

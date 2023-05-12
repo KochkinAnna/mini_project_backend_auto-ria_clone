@@ -54,6 +54,11 @@ export class CreateAdminDto {
   @NoProfanity()
   lastName?: string;
 
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  avatar?: string;
+
   @ApiProperty({ required: true, example: 'SomeCompany' })
   @IsNotEmpty()
   @IsString()
@@ -68,13 +73,13 @@ export class CreateAdminDto {
   role: UserRole;
 
   @ApiProperty({ required: false, example: '+380500554471' })
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @IsPhoneNumber()
-  phone?: string;
+  phoneNumber: string;
 
   @ApiProperty({ required: true, example: 'CEO' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   @Matches(POSITION_REGEX, {
     message:
