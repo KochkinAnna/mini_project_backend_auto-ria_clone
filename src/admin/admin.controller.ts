@@ -4,15 +4,16 @@ import {
   Delete,
   Get,
   HttpStatus,
+  Param,
   Patch,
   Post,
   Req,
   Res,
 } from '@nestjs/common';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/createAdmin.dto';
-import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Admin')
 @Controller('admin')
@@ -165,8 +166,13 @@ export class AdminController {
   @Post('/seller-premium')
   async createSellerPremium() {}
 
+  @ApiParam({ name: 'idAdmin', required: true })
   @Patch('/:idAdmin')
-  async updateAdmin() {}
+  async updateAdmin(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('idAdmin') idAdmin: string,
+  ) {}
 
   @Patch('/buyer/:idBuyer')
   async updateBuyer() {}
@@ -216,8 +222,17 @@ export class AdminController {
   @Patch('/sellerPremium/:idSellerPremium')
   async updateSellerPremium() {}
 
+  @ApiParam({ name: 'idAdmin', required: true })
   @Delete('/:idAdmin')
-  async deleteAdmin() {}
+  async deleteAdmin(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('idAdmin') idAdmin: string,
+  ) {
+    return res
+      .status(HttpStatus.OK)
+      .json(await this.adminService.deleteAdmin(idAdmin));
+  }
 
   @Delete('/buyer/:idBuyer')
   async deleteBuyer() {}

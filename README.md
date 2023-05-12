@@ -12,16 +12,19 @@ This is the backend of an __SomeCompany platform__, a scalable, flexible, and ea
 
 ----
 ## Technologies Used
-- Nest.js. It uses JavaScript, is built with TypeScript
-- MySQL
-
 To get started with the backend, you will need to have Node.js and npm installed on your machine.
+
+- Nest.js. It uses JavaScript, is built with TypeScript
+- MySQL. An open-source ORM is Prisma.
 
 ----
 ## Installation
 1. Clone the repository.
 2. Install the necessary dependencies using the command `npm install`.
-3. Create a MySQL database and update the `.env` file with the correct database credentials.
+3. We are utilizing the Prisma CLI. As a best practice, it's recommended to invoke the CLI locally by prefixing it with npx:
+     `npx prisma`. Now create your initial Prisma setup using the init command of the Prisma CLI:
+     `npx prisma init`.
+   Create a MySQL database and update the `.env` file with the correct database credentials.
 4. Run the command `npm run start` to start the server.
 5. Navigate to `http://localhost:3000` in your browser to view the application.
 

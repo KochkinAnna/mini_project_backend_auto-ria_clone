@@ -17,5 +17,8 @@ export class AdminService {
 
   async updateAdmin() {}
 
-  async deleteAdmin() {}
+  async deleteAdmin(idAdmin: string) {
+    this.admins.find((item) => item.id === idAdmin);
+    return this.admins;
+  }
 }
