@@ -44,108 +44,153 @@ export class AdminController {
   @Post()
   async createAdmin() {}
 
-  @Post('/buyer/:id')
+  @Post('/buyer')
   async createBuyer() {}
 
-  @Post('/cardealership-car/:id')
+  @Post('/car')
   async createCar() {}
 
-  @Post('/cardealership/:id')
+  @Post('/CarSeller/:idSeller')
+  async createCarSeller() {}
+
+  @Post('/CarSellerPremium/:idSellerPremium')
+  async createCarSellerPremium() {}
+
+  @Post('/carCardealershipAdmin/:idCardealershipAdmin')
+  async createCarCardealershipAdmin() {}
+
+  @Post('/carCardealershipManager/:idCardealershipManager')
+  async createCarCardealershipManager() {}
+
+  @Post('/carCardealershipSales/:idCardealershipSales')
+  async createCarCardealershipSales() {}
+
+  @Post('/cardealership')
   async createCardealership() {}
 
-  @Post('/cardealership-admin/:id')
+  @Post('/cardealership-admin')
   async createCardealershipAdmin() {}
 
-  @Post('/cardealership-manager/:id')
+  @Post('/cardealership-manager')
   async createCardealershipManager() {}
 
-  @Post('/cardealership-mechanic/:id')
+  @Post('/cardealership-mechanic')
   async createCardealershipMechanic() {}
 
-  @Post('/cardealership-sales/:id')
+  @Post('/cardealership-sales')
   async createCardealershipSales() {}
 
-  @Post('/cardealership-service-manager/:id')
+  @Post('/cardealership-service-manager')
   async createCardealershipServiceManager() {}
 
-  @Post('/manager/:id')
+  @Post('/manager')
   async createManager() {}
 
-  @Post('/seller/:id')
-  async createSaller() {}
+  @Post('/seller')
+  async createSeller() {}
 
-  @Post('/seller-premium/:id')
-  async createSallerPremium() {}
+  @Post('/seller-premium')
+  async createSellerPremium() {}
 
-  @Patch('/:id')
+  @Patch('/:idAdmin')
   async updateAdmin() {}
 
-  @Patch('/:id')
+  @Patch('/buyer/:idBuyer')
   async updateBuyer() {}
 
-  @Patch('/:id')
+  @Patch('/car')
   async updateCar() {}
 
-  @Patch('/:id')
+  @Patch('/carSeller/:idSeller')
+  async updateCarSeller() {}
+
+  @Patch('/carSellerPremium/:idSellerPremium')
+  async updateCarSellerPremium() {}
+
+  @Patch('/carCardealershipAdmin/:idCardealershipAdmin')
+  async updateCarCardealershipAdmin() {}
+
+  @Patch('/carCardealershipManager/:idCardealershipManager')
+  async updateCarCardealershipManager() {}
+
+  @Patch('/carCardealershipSales/:idCardealershipSales')
+  async updateCarCardealershipSales() {}
+
+  @Patch('/cardealership/:idCardealership')
   async updateCardealership() {}
 
-  @Patch('/:id')
+  @Patch('/cardealershipAdmin/:idCardealershipAdmin')
   async updateCardealershipAdmin() {}
 
-  @Patch('/:id')
+  @Patch('/cardealershipManager/:idCardealershipManager')
   async updateCardealershipManager() {}
 
-  @Patch('/:id')
+  @Patch('/cardealershipMechanic/:idCardealershipMechanic')
   async updateCardealershipMechanic() {}
 
-  @Patch('/:id')
+  @Patch('/cardealershipSales/:idCardealershipSales')
   async updateCardealershipSales() {}
 
-  @Patch('/:id')
+  @Patch('/cardealershipServiceManager/:idCardealershipServiceManager')
   async updateCardealershipServiceManager() {}
 
-  @Patch('/:id')
+  @Patch('/manager/:idManager')
   async updateManager() {}
 
-  @Patch('/:id')
-  async updateSaller() {}
+  @Patch('/seller/:idSeller')
+  async updateSeller() {}
 
-  @Patch('/:id')
-  async updateSallerPremium() {}
+  @Patch('/sellerPremium/:idSellerPremium')
+  async updateSellerPremium() {}
 
-  @Delete('/:id')
+  @Delete('/:idAdmin')
   async deleteAdmin() {}
 
-  @Delete('/:id')
+  @Delete('/buyer/:idBuyer')
   async deleteBuyer() {}
 
-  @Delete('/:id')
+  @Delete('/car')
   async deleteCar() {}
 
-  @Delete('/:id')
+  @Delete('/carSeller/:idSeller')
+  async deleteCarSeller() {}
+
+  @Delete('/carSellerPremium/:idSellerPremium')
+  async deleteCarSellerPremium() {}
+
+  @Delete('/carCardealershipAdmin/:idCardealershipAdmin')
+  async deleteCarCardealershipAdmin() {}
+
+  @Delete('/carCardealershipManager/:idCardealershipManager')
+  async deleteCarCardealershipManager() {}
+
+  @Delete('/carCardealershipSales/:idCardealershipSales')
+  async deleteCarCardealershipSales() {}
+
+  @Delete('/cardealership/:idCardealership')
   async deleteCardealership() {}
 
-  @Delete('/:id')
+  @Delete('/cardealershipAdmin/:idCardealershipAdmin')
   async deleteCardealershipAdmin() {}
 
-  @Delete('/:id')
+  @Delete('/cardealershipManager/:idCardealershipManager')
   async deleteCardealershipManager() {}
 
-  @Delete('/:id')
+  @Delete('/cardealershipMechanic/:idCardealershipMechanic')
   async deleteCardealershipMechanic() {}
 
-  @Delete('/:id')
+  @Delete('/cardealershipSales/:idCardealershipSales')
   async deleteCardealershipSales() {}
 
-  @Delete('/:id')
+  @Delete('/cardealershipServiceManager/:idCardealershipServiceManager')
   async deleteCardealershipServiceManager() {}
 
-  @Delete('/:id')
+  @Delete('/manager/:idManager')
   async deleteManager() {}
 
-  @Delete('/:id')
-  async deleteSaller() {}
+  @Delete('/seller/:idSeller')
+  async deleteSeller() {}
 
-  @Delete('/:id')
-  async deleteSallerPremium() {}
+  @Delete('/sellerPremium/:idSellerPremium')
+  async deleteSellerPremium() {}
 }
