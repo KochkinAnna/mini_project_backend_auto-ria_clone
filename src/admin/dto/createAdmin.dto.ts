@@ -77,7 +77,7 @@ export class CreateAdminDto {
   phoneNumber: string;
 
   @ApiProperty({ required: true, example: 'CEO' })
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
   @Matches(POSITION_REGEX, {
     message:

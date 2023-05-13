@@ -49,11 +49,13 @@ model User {
 model Admin {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [adminId], references: [id])
-  adminId   Int      @unique
+  adminId   Int
   company   String
   position  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([adminId], name: "adminId_unique")
 }
 
 model Manager {
