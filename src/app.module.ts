@@ -31,12 +31,11 @@ import { CardealershipSalesModule } from './cardealership-sales/cardealership-sa
 import { CardealershipSalesService } from './cardealership-sales/cardealership-sales.service';
 import { CardealershipServiceManagerController } from './cardealership-service-manager/cardealership-service-manager.controller';
 import { CardealershipServiceManagerModule } from './cardealership-service-manager/cardealership-service-manager.module';
+import { PrismaModule } from './common/orm/prisma.module';
+import { PrismaService } from './common/orm/prisma.service';
 import { ManagerController } from './manager/manager.controller';
 import { ManagerModule } from './manager/manager.module';
 import { ManagerService } from './manager/manager.service';
-import { PermissionController } from './permission/permission.controller';
-import { PermissionModule } from './permission/permission.module';
-import { PermissionService } from './permission/permission.service';
 import { SellerController } from './seller/seller.controller';
 import { SellerModule } from './seller/seller.module';
 import { SellerService } from './seller/seller.service';
@@ -57,7 +56,7 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     CardealershipSalesModule,
     CardealershipServiceManagerModule,
     ManagerModule,
-    PermissionModule,
+    PrismaModule,
     SellerModule,
     SellerPremiumModule,
   ],
@@ -73,7 +72,6 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     CardealershipSalesController,
     CardealershipMechanicController,
     CardealershipServiceManagerController,
-    PermissionController,
     ManagerController,
     SellerController,
     SellerPremiumController,
@@ -90,7 +88,7 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     CardealershipMechanicService,
     CardealershipSalesService,
     ManagerService,
-    PermissionService,
+    PrismaService,
     SellerService,
     SellerPremiumService,
   ],

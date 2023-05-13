@@ -47,6 +47,22 @@ where username is the database user, database_name is the database name, and mig
 
 After executing SQL queries from the migration file, the database will be updated to the appropriate version, and you can start interacting with it through your application.
 
+_You can use migration in other way:_
+1. Click the Database tab in the right pane of IntelliJ IDEA.
+
+2. Click the "+" icon and select Data Source > MySQL.
+
+3. Log in to your database using your login credentials and click "Test Connection" to make sure it works.
+
+4. Once you have successfully connected to your database, choose File > Import from the main menu.
+
+5. Select the migration.sql file that contains the SQL queries to create the tables and data in the database and click OK.
+
+6. Wait until the migration is complete and make sure that all queries are executed successfully.
+
+This is the easiest way to start a database migration from the migration.sql file to IntelliJ IDEA for MySQL.
+
+
 ----
 
 ## Authentication
@@ -64,9 +80,8 @@ The backend also includes middleware for checking the user's role and permission
 The backend supports two types of user accounts: basic and premium. Premium accounts can be purchased by users for a fee, and provide access to additional features, such as statistics on their listings.
 
 ----
-## Features
+## Features in roles
 * __Admin:__ a superuser who can do everything. Only the customer and its partners will have this role.
-* __Auth:__ contains functions necessary for user authorization, such as registration, logging in, logging out, password recovery, etc.
 * __Buyer:__ "walks" on the platform, can contact an individual seller or car dealership
 * __Car:__ contains methods for creating, editing, and deleting cars.
 * __Cardealership:__ is responsible for creating, editing, and deleting car dealerships on the platform. In addition, you can also display a list of all available car dealerships and details of each of them.
@@ -79,9 +94,7 @@ The backend supports two types of user accounts: basic and premium. Premium acco
   <p>Contains methods for creating, editing, and deleting a salesperson profile, viewing the list of salespeople and their profiles, and granting and removing access to features that are available only to salespeople.</p>
 * __Cardealership-service-manager:__ managing the service department and ensuring that all customer repairs are completed in a timely and satisfactory manner and inventory management.
   <p>Contains methods for creating, editing, and deleting a service-manager profile, viewing a list of service-managers and their profiles, and granting and denying access to functions that are available only to service-managers.</p>
-* __Manager:__ manages the platform, bans people, removes invalid ads, checks suspicious ads, etc. Only the Administrator can create such a user.
-* __Permission:__ the project defines the actions or resources that can be accessed by each of the roles, defines the functions or methods that perform these actions, and assigns them a certain level of access (or permissions). For example, the function for adding a new ad can have the permissions "create_advertisement" and the function for deleting a user can have the permissions "delete_user".
-  In project controllers, you can check permissions for each action to allow or deny access to users with specific roles. 
+* __Manager:__ manages the platform, bans people, removes invalid ads, checks suspicious ads, etc. Only the Administrator can create such a user. 
 * __Seller:__ a registered seller can put up his own car for sale, but only one car can be put up for sale.
   <p>When choosing a car brand, you should see a drop-down list with all brands. If a particular brand is not in the list, the seller can notify the administration that this brand is missing. The client can create a price tag in the following currencies: USD, EUR, UAH. The price is indicated in only one of the currencies. The rest of the currencies are calculated at the rate of a private bank. Prices are updated once a day. It is mandatory to indicate at what rate we made the calculation and what price the user indicated when posting the ad.</p>
   <p>Each ad is automatically checked for foul language.

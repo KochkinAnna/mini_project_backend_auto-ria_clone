@@ -1,24 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { Admin } from '@prisma/client';
 
+import { PrismaService } from '../common/orm/prisma.service';
 import { CreateAdminDto } from './dto/createAdmin.dto';
 
 @Injectable()
 export class AdminService {
-  private admins: any = [];
+  constructor(private readonly prismaService: PrismaService) {}
 
   async getAdminList() {}
 
   async getAdmin() {}
 
-  async createAdmin(adminData: CreateAdminDto) {
-    this.admins.push(adminData);
-    return this.admins;
+  async createAdmin(adminData: CreateAdminDto): Promise<Admin> {
+    return this.prismaService.admin.create({
+      data: {
+        user: {
+          create: {
+            email: adminData.email,
+            password: adminData.password,
+            firstName: adminData.firstName,
+            lastName: adminData.lastName,
+            avatar: adminData.avatar,
+            role: adminData.role,
+            phoneNumber: adminData.phoneNumber,
+          },
+        },
+        company: adminData.company,
+        position: adminData.position,
+      },
+    });
   }
 
   async updateAdmin() {}
 
-  async deleteAdmin(idAdmin: string) {
-    this.admins.find((item) => item.id === idAdmin);
-    return this.admins;
-  }
+  async deleteAdmin(idAdmin: string) {}
 }

@@ -9,13 +9,13 @@ import {
   MinLength,
 } from 'class-validator';
 
-import { NoProfanity } from '../../decorator/noProfanity.decorator';
-import { UserRole } from '../../enum/user-role.enum';
-import { COMPANY_REGEX } from '../../regex/company.regex';
-import { FIRSTNAME_REGEX } from '../../regex/firstName.regex';
-import { LASTNAME_REGEX } from '../../regex/lastName.regex';
-import { PASSWORD_REGEX } from '../../regex/password.regex';
-import { POSITION_REGEX } from '../../regex/position.regex';
+import { NoProfanity } from '../../common/decorator/noProfanity.decorator';
+import { UserRole } from '../../common/enum/user-role.enum';
+import { COMPANY_REGEX } from '../../common/regex/company.regex';
+import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
+import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
+import { PASSWORD_REGEX } from '../../common/regex/password.regex';
+import { POSITION_REGEX } from '../../common/regex/position.regex';
 
 export class CreateAdminDto {
   @ApiProperty({ required: false, example: 'admin@somecompany.com' })
@@ -34,7 +34,7 @@ export class CreateAdminDto {
   })
   password: string;
 
-  @ApiProperty({ required: true, example: 'Evgeniy' })
+  @ApiProperty({ required: true, example: 'Kokos' })
   @IsNotEmpty()
   @IsString()
   @Matches(FIRSTNAME_REGEX, {
@@ -55,8 +55,6 @@ export class CreateAdminDto {
   lastName?: string;
 
   @ApiProperty()
-  @IsOptional()
-  @IsString()
   avatar?: string;
 
   @ApiProperty({ required: true, example: 'SomeCompany' })
@@ -72,7 +70,7 @@ export class CreateAdminDto {
   @IsNotEmpty()
   role: UserRole;
 
-  @ApiProperty({ required: false, example: '+380500554471' })
+  @ApiProperty({ required: false, example: '+380500554417' })
   @IsNotEmpty()
   @IsString()
   @IsPhoneNumber()

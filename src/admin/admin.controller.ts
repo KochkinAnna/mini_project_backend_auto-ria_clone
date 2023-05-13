@@ -9,9 +9,23 @@ import {
   Post,
   Req,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Admin } from '@prisma/client';
+import { diskStorage } from 'multer';
 
+import {
+  editFileName,
+  imageFileFilter,
+} from '../common/file-upload/file.upload';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/createAdmin.dto';
 
@@ -107,12 +121,27 @@ export class AdminController {
   @Get('/sellerPremium/:idSellerPremium')
   async getSellerPremium() {}
 
+  @ApiOperation({ summary: 'Create a new admin' })
+  @ApiOkResponse({ type: CreateAdminDto })
   @Post()
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './public',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
   async createAdmin(
     @Req() req: any,
     @Body() body: CreateAdminDto,
     @Res() res: any,
-  ) {
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Admin> {
+    if (file) {
+      body.avatar = `public/${file.filename}`;
+    }
     return res
       .status(HttpStatus.CREATED)
       .json(await this.adminService.createAdmin(body));
