@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Car, Seller } from '@prisma/client';
 
+import CreateCarDto from '../car/dto/createCar.dto';
 import { PrismaService } from '../common/orm/prisma.service';
+import { Currency } from '../common/type/currancy.type';
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
-import UpdateCarDto from '../car/dto/updateCar.dto';
-import CreateCarDto from '../car/dto/createCar.dto';
 
 @Injectable()
 export class SellerService {
@@ -149,12 +149,20 @@ export class SellerService {
 
     return this.prismaService.car.create({
       data: {
-        ...carData,
+        brand: carData.brand,
+        model: carData.model,
+        year: parseInt(carData.year),
+        mileage: parseInt(carData.mileage),
+        price: parseInt(carData.price),
+        currency: carData.currency as Currency,
+        description: carData.description,
+        image: carData.image,
         seller: {
           connect: {
             id: sellerId,
           },
         },
+        owner: undefined,
       },
     });
   }
@@ -162,7 +170,7 @@ export class SellerService {
   async updateCarBySeller(
     idSeller: string,
     idCar: string,
-    carData: UpdateCarDto,
+    carData: CreateCarDto,
   ): Promise<Car> {
     const sellerId = parseInt(idSeller);
     const carId = parseInt(idCar);
@@ -191,7 +199,20 @@ export class SellerService {
         sellerId: sellerId,
       },
       data: {
-        ...carData,
+        brand: carData.brand,
+        model: carData.model,
+        year: parseInt(carData.year),
+        mileage: parseInt(carData.mileage),
+        price: parseInt(carData.price),
+        currency: carData.currency as Currency,
+        description: carData.description,
+        image: carData.image,
+        seller: {
+          connect: {
+            id: sellerId,
+          },
+        },
+        owner: undefined,
       },
     });
   }

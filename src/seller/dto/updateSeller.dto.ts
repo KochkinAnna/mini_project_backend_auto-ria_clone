@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import UpdateCarDto from '../../car/dto/updateCar.dto';
+import { UserRole } from '../../common/enum/user-role.enum';
 
 class UpdateSellerDto {
   @ApiProperty({ required: false, example: 'John' })
@@ -32,6 +33,10 @@ class UpdateSellerDto {
 
   @ApiProperty({ required: false})
   avatar?: string;
+
+  @ApiProperty({ enum: UserRole })
+  @IsOptional()
+  role?: UserRole;
 
   @ApiProperty({ required: false, type: UpdateCarDto })
   @IsOptional()

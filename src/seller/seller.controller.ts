@@ -181,7 +181,7 @@ export class SellerController {
   async updateCarBySeller(
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,
-    @Body() carData: UpdateCarDto,
+    @Body() carData: CreateCarDto, // Змінено тип на CreateCarDto
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Car> {
     if (file) {

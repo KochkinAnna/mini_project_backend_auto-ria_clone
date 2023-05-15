@@ -9,6 +9,7 @@ import {
 } from 'class-validator';
 
 import CreateCarDto from '../../car/dto/createCar.dto';
+import { UserRole } from '../../common/enum/user-role.enum';
 
 class CreateSellerDto {
   @ApiProperty({ required: true, example: 'John' })
@@ -38,6 +39,10 @@ class CreateSellerDto {
 
   @ApiProperty({ required: false })
   avatar?: string;
+
+  @ApiProperty({ enum: UserRole })
+  @IsNotEmpty()
+  role: UserRole;
 
   @ApiProperty({ required: false, type: CreateCarDto })
   @IsOptional()
