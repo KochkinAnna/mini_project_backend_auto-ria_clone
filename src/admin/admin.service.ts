@@ -9,6 +9,65 @@ import { UpdateAdminDto } from './dto/updateAdmin.dto';
 export class AdminService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async createAdmin(adminData: CreateAdminDto): Promise<Admin> {
+    return this.prismaService.admin.create({
+      data: {
+        user: {
+          create: {
+            email: adminData.email,
+            password: adminData.password,
+            firstName: adminData.firstName,
+            lastName: adminData.lastName,
+            avatar: adminData.avatar,
+            role: adminData.role,
+            phoneNumber: adminData.phoneNumber,
+          },
+        },
+        company: adminData.company,
+        position: adminData.position,
+      },
+    });
+  }
+
+  async updateAdmin(
+    idAdmin: string,
+    adminData: UpdateAdminDto,
+  ): Promise<Admin> {
+    const adminId = parseInt(idAdmin);
+    if (isNaN(adminId)) {
+      throw new Error(`Invalid ID: ${idAdmin}`);
+    }
+    return this.prismaService.admin.update({
+      where: {
+        id: adminId,
+      },
+      data: {
+        user: {
+          update: {
+            email: adminData.email,
+            firstName: adminData.firstName,
+            lastName: adminData.lastName,
+            avatar: adminData.avatar,
+            phoneNumber: adminData.phoneNumber,
+          },
+        },
+        company: adminData.company,
+        position: adminData.position,
+      },
+      include: {
+        user: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+            phoneNumber: true,
+          },
+        },
+      },
+    });
+  }
+
   async getAdminList(): Promise<Admin[]> {
     return this.prismaService.admin.findMany({
       orderBy: {
@@ -90,65 +149,6 @@ export class AdminService {
     }
 
     return admin;
-  }
-
-  async createAdmin(adminData: CreateAdminDto): Promise<Admin> {
-    return this.prismaService.admin.create({
-      data: {
-        user: {
-          create: {
-            email: adminData.email,
-            password: adminData.password,
-            firstName: adminData.firstName,
-            lastName: adminData.lastName,
-            avatar: adminData.avatar,
-            role: adminData.role,
-            phoneNumber: adminData.phoneNumber,
-          },
-        },
-        company: adminData.company,
-        position: adminData.position,
-      },
-    });
-  }
-
-  async updateAdmin(
-    idAdmin: string,
-    adminData: UpdateAdminDto,
-  ): Promise<Admin> {
-    const adminId = parseInt(idAdmin);
-    if (isNaN(adminId)) {
-      throw new Error(`Invalid ID: ${idAdmin}`);
-    }
-    return this.prismaService.admin.update({
-      where: {
-        id: adminId,
-      },
-      data: {
-        user: {
-          update: {
-            email: adminData.email,
-            firstName: adminData.firstName,
-            lastName: adminData.lastName,
-            avatar: adminData.avatar,
-            phoneNumber: adminData.phoneNumber,
-          },
-        },
-        company: adminData.company,
-        position: adminData.position,
-      },
-      include: {
-        user: {
-          select: {
-            email: true,
-            firstName: true,
-            lastName: true,
-            avatar: true,
-            phoneNumber: true,
-          },
-        },
-      },
-    });
   }
 
   async deleteAdmin(idAdmin: string): Promise<Admin> {

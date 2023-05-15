@@ -52,16 +52,38 @@ export class AdminController {
   )
   async createAdmin(
     @Req() req: any,
-    @Body() body: CreateAdminDto,
+    @Body() adminData: CreateAdminDto,
     @Res() res: any,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Admin> {
     if (file) {
-      body.avatar = `public/${file.filename}`;
+      adminData.avatar = `public/${file.filename}`;
     }
     return res
       .status(HttpStatus.CREATED)
-      .json(await this.adminService.createAdmin(body));
+      .json(await this.adminService.createAdmin(adminData));
+  }
+
+  @ApiParam({ name: 'idAdmin', required: true })
+  @Patch('/:idAdmin')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './public',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async updateAdmin(
+    @Param('idAdmin') idAdmin: string,
+    @Body() adminData: UpdateAdminDto,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Admin> {
+    if (file) {
+      adminData.avatar = `public/${file.filename}`;
+    }
+    return this.adminService.updateAdmin(idAdmin, adminData);
   }
 
   @ApiParam({ name: 'idAdmin', type: 'string', description: 'Admin ID' })
@@ -104,15 +126,6 @@ export class AdminController {
     return res
       .status(HttpStatus.OK)
       .json(await this.adminService.getAdminList());
-  }
-
-  @ApiParam({ name: 'idAdmin', required: true })
-  @Patch('/:idAdmin')
-  async updateAdmin(
-    @Param('idAdmin') idAdmin: string,
-    @Body() adminData: UpdateAdminDto,
-  ): Promise<Admin> {
-    return this.adminService.updateAdmin(idAdmin, adminData);
   }
 
   @ApiParam({ name: 'idAdmin', required: true })

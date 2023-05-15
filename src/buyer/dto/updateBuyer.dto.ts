@@ -15,7 +15,7 @@ import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
 import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
 import { PASSWORD_REGEX } from '../../common/regex/password.regex';
 
-export class CreateBuyerDto {
+export class UpdateBuyerDto {
   @ApiPropertyOptional({ example: 'buyer@gmail.com' })
   @IsOptional()
   @IsString()
