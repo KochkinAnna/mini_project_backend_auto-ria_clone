@@ -30,20 +30,20 @@ enum AdStatus {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
   password    String
   firstName   String
   lastName    String?
   avatar      String?
-  role        UserRole @default(BUYER)
+  role        UserRole  @default(BUYER)
   phoneNumber String
   buyer       Buyer?
   seller      Seller?
   admin       Admin?
   manager     Manager?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
 }
 
 model Admin {
@@ -59,9 +59,9 @@ model Admin {
 }
 
 model Manager {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [managerId], references: [id])
-  managerId Int      @unique
+  id        Int  @id @default(autoincrement())
+  user      User @relation(fields: [managerId], references: [id])
+  managerId Int  @unique
 }
 
 model Buyer {

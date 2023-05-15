@@ -14,8 +14,8 @@ import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
 import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
 import { PASSWORD_REGEX } from '../../common/regex/password.regex';
 
-export class UpdateBuyerDto {
-  @ApiPropertyOptional({ example: 'buyer@gmail.com' })
+export class UpdateManagerDto {
+  @ApiPropertyOptional({ example: 'manager@gmail.com' })
   @IsOptional()
   @IsString()
   @IsEmail()
@@ -31,7 +31,7 @@ export class UpdateBuyerDto {
   })
   password?: string;
 
-  @ApiPropertyOptional({ example: 'Jack' })
+  @ApiPropertyOptional({ example: 'Tom' })
   @IsOptional()
   @IsString()
   @Matches(FIRSTNAME_REGEX, {
@@ -41,7 +41,7 @@ export class UpdateBuyerDto {
   @NoProfanity()
   firstName?: string;
 
-  @ApiPropertyOptional({ example: 'Daniels' })
+  @ApiPropertyOptional({ example: 'Conor' })
   @IsOptional()
   @IsString()
   @Matches(LASTNAME_REGEX, {
