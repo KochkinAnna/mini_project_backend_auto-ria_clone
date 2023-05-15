@@ -11,9 +11,6 @@ import { AuthService } from './auth/auth.service';
 import { BuyerController } from './buyer/buyer.controller';
 import { BuyerModule } from './buyer/buyer.module';
 import { BuyerService } from './buyer/buyer.service';
-import { CarController } from './car/car.controller';
-import { CarModule } from './car/car.module';
-import { CarService } from './car/car.service';
 import { CardealershipController } from './cardealership/cardealership.controller';
 import { CardealershipModule } from './cardealership/cardealership.module';
 import { CardealershipService } from './cardealership/cardealership.service';
@@ -48,7 +45,6 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     AdminModule,
     AuthModule,
     BuyerModule,
-    CarModule,
     CardealershipModule,
     CardealershipAdminModule,
     CardealershipManagerModule,
@@ -65,7 +61,6 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     AdminController,
     AuthController,
     BuyerController,
-    CarController,
     CardealershipController,
     CardealershipAdminController,
     CardealershipManagerController,
@@ -81,7 +76,6 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     AdminService,
     AuthService,
     BuyerService,
-    CarService,
     CardealershipService,
     CardealershipAdminService,
     CardealershipManagerService,
