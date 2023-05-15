@@ -37,6 +37,33 @@ import { UpdateAdminDto } from './dto/updateAdmin.dto';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  //Admin
+  @ApiOperation({ summary: 'Create a new admin' })
+  @ApiOkResponse({ type: CreateAdminDto })
+  @Post()
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './public',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async createAdmin(
+    @Req() req: any,
+    @Body() body: CreateAdminDto,
+    @Res() res: any,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Admin> {
+    if (file) {
+      body.avatar = `public/${file.filename}`;
+    }
+    return res
+      .status(HttpStatus.CREATED)
+      .json(await this.adminService.createAdmin(body));
+  }
+
   @ApiParam({ name: 'idAdmin', type: 'string', description: 'Admin ID' })
   @Get('/:idAdmin')
   async getAdminById(
@@ -79,161 +106,6 @@ export class AdminController {
       .json(await this.adminService.getAdminList());
   }
 
-  @Get('/buyer')
-  async getBuyerList() {}
-
-  @Get('/car')
-  async getCarList() {}
-
-  @Get('/cardealership')
-  async getCardealershipList() {}
-
-  @Get('/cardealershipAdmin')
-  async getCardealershipAdminList() {}
-
-  @Get('/cardealershipManager')
-  async getCardealershipManagerList() {}
-
-  @Get('/cardealershipMechanic')
-  async getCardealershipMechanicList() {}
-
-  @Get('/cardealershipSales')
-  async getCardealershipSalesList() {}
-
-  @Get('/cardealershipServiceManager')
-  async getCardealershipServiceManagerList() {}
-
-  @Get('/manager')
-  async getManagerList() {}
-
-  @Get('/seller')
-  async getSellerList() {}
-
-  @Get('/sellerPremium')
-  async getSellerPremiumList() {}
-
-  @Get('/buyer/:idBuyer')
-  async getBuyer() {}
-
-  @Get('/car/:idCar')
-  async getCar() {}
-
-  @Get('/carSeller/:idCarSeller')
-  async getCarSeller() {}
-
-  @Get('/carSellerPremium/:idCarSellerPremium')
-  async getCarSellerPremium() {}
-
-  @Get('/carCardealershipAdmin/:idCarCardealershipAdmin')
-  async getCarCardealershipAdmin() {}
-
-  @Get('/carCardealershipManager/:idCarCardealershipManager')
-  async getCarCardealershipManager() {}
-
-  @Get('/carCardealershipSales/:idCarCardealershipSales')
-  async getCarCardealershipSales() {}
-
-  @Get('/cardealership/:idCardealership')
-  async getCardealership() {}
-
-  @Get('/cardealershipAdmin/:idCardealershipAdmin')
-  async getCardealershipAdmin() {}
-
-  @Get('/cardealershipManager/:idCardealershipManager')
-  async getCardealershipManager() {}
-
-  @Get('/cardealershipMechanic/:idCardealershipMechanic')
-  async getCardealershipMechanic() {}
-
-  @Get('/cardealershipSales/:idCardealershipSales')
-  async getCardealershipSales() {}
-
-  @Get('/cardealershipServiceManager/:idCardealershipServiceManager')
-  async getCardealershipServiceManager() {}
-
-  @Get('/manager/:idManager')
-  async getManager() {}
-
-  @Get('/seller/:idSeller')
-  async getSeller() {}
-
-  @Get('/sellerPremium/:idSellerPremium')
-  async getSellerPremium() {}
-
-  @ApiOperation({ summary: 'Create a new admin' })
-  @ApiOkResponse({ type: CreateAdminDto })
-  @Post()
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './public',
-        filename: editFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
-  )
-  async createAdmin(
-    @Req() req: any,
-    @Body() body: CreateAdminDto,
-    @Res() res: any,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<Admin> {
-    if (file) {
-      body.avatar = `public/${file.filename}`;
-    }
-    return res
-      .status(HttpStatus.CREATED)
-      .json(await this.adminService.createAdmin(body));
-  }
-
-  @Post('/buyer')
-  async createBuyer() {}
-
-  @Post('/car')
-  async createCar() {}
-
-  @Post('/CarSeller/:idSeller')
-  async createCarSeller() {}
-
-  @Post('/CarSellerPremium/:idSellerPremium')
-  async createCarSellerPremium() {}
-
-  @Post('/carCardealershipAdmin/:idCardealershipAdmin')
-  async createCarCardealershipAdmin() {}
-
-  @Post('/carCardealershipManager/:idCardealershipManager')
-  async createCarCardealershipManager() {}
-
-  @Post('/carCardealershipSales/:idCardealershipSales')
-  async createCarCardealershipSales() {}
-
-  @Post('/cardealership')
-  async createCardealership() {}
-
-  @Post('/cardealershipAdmin')
-  async createCardealershipAdmin() {}
-
-  @Post('/cardealershipManager')
-  async createCardealershipManager() {}
-
-  @Post('/cardealershipMechanic')
-  async createCardealershipMechanic() {}
-
-  @Post('/cardealershipSales')
-  async createCardealershipSales() {}
-
-  @Post('/cardealershipServiceManager')
-  async createCardealershipServiceManager() {}
-
-  @Post('/manager')
-  async createManager() {}
-
-  @Post('/seller')
-  async createSeller() {}
-
-  @Post('/seller-premium')
-  async createSellerPremium() {}
-
   @ApiParam({ name: 'idAdmin', required: true })
   @Patch('/:idAdmin')
   async updateAdmin(
@@ -242,54 +114,6 @@ export class AdminController {
   ): Promise<Admin> {
     return this.adminService.updateAdmin(idAdmin, adminData);
   }
-
-  @Patch('/buyer/:idBuyer')
-  async updateBuyer() {}
-
-  @Patch('/car')
-  async updateCar() {}
-
-  @Patch('/carSeller/:idSeller')
-  async updateCarSeller() {}
-
-  @Patch('/carSellerPremium/:idSellerPremium')
-  async updateCarSellerPremium() {}
-
-  @Patch('/carCardealershipAdmin/:idCardealershipAdmin')
-  async updateCarCardealershipAdmin() {}
-
-  @Patch('/carCardealershipManager/:idCardealershipManager')
-  async updateCarCardealershipManager() {}
-
-  @Patch('/carCardealershipSales/:idCardealershipSales')
-  async updateCarCardealershipSales() {}
-
-  @Patch('/cardealership/:idCardealership')
-  async updateCardealership() {}
-
-  @Patch('/cardealershipAdmin/:idCardealershipAdmin')
-  async updateCardealershipAdmin() {}
-
-  @Patch('/cardealershipManager/:idCardealershipManager')
-  async updateCardealershipManager() {}
-
-  @Patch('/cardealershipMechanic/:idCardealershipMechanic')
-  async updateCardealershipMechanic() {}
-
-  @Patch('/cardealershipSales/:idCardealershipSales')
-  async updateCardealershipSales() {}
-
-  @Patch('/cardealershipServiceManager/:idCardealershipServiceManager')
-  async updateCardealershipServiceManager() {}
-
-  @Patch('/manager/:idManager')
-  async updateManager() {}
-
-  @Patch('/seller/:idSeller')
-  async updateSeller() {}
-
-  @Patch('/sellerPremium/:idSellerPremium')
-  async updateSellerPremium() {}
 
   @ApiParam({ name: 'idAdmin', required: true })
   @Delete('/:idAdmin')
@@ -301,51 +125,182 @@ export class AdminController {
     res.sendStatus(HttpStatus.OK);
   }
 
+  //Buyer
+  @Post('/buyer')
+  async createBuyer() {}
+
+  @Patch('/buyer/:idBuyer')
+  async updateBuyer() {}
+
+  @Get('/buyer')
+  async getBuyerList() {}
+
+  @Get('/buyer/:idBuyer')
+  async getBuyer() {}
+
   @Delete('/buyer/:idBuyer')
   async deleteBuyer() {}
 
-  @Delete('/car')
-  async deleteCar() {}
+  //Manager
+  @Post('/manager')
+  async createManager() {}
 
-  @Delete('/carSeller/:idSeller')
-  async deleteCarSeller() {}
+  @Patch('/manager/:idManager')
+  async updateManager() {}
 
-  @Delete('/carSellerPremium/:idSellerPremium')
-  async deleteCarSellerPremium() {}
+  @Get('/manager')
+  async getManagerList() {}
 
-  @Delete('/carCardealershipAdmin/:idCardealershipAdmin')
-  async deleteCarCardealershipAdmin() {}
-
-  @Delete('/carCardealershipManager/:idCardealershipManager')
-  async deleteCarCardealershipManager() {}
-
-  @Delete('/carCardealershipSales/:idCardealershipSales')
-  async deleteCarCardealershipSales() {}
-
-  @Delete('/cardealership/:idCardealership')
-  async deleteCardealership() {}
-
-  @Delete('/cardealershipAdmin/:idCardealershipAdmin')
-  async deleteCardealershipAdmin() {}
-
-  @Delete('/cardealershipManager/:idCardealershipManager')
-  async deleteCardealershipManager() {}
-
-  @Delete('/cardealershipMechanic/:idCardealershipMechanic')
-  async deleteCardealershipMechanic() {}
-
-  @Delete('/cardealershipSales/:idCardealershipSales')
-  async deleteCardealershipSales() {}
-
-  @Delete('/cardealershipServiceManager/:idCardealershipServiceManager')
-  async deleteCardealershipServiceManager() {}
+  @Get('/manager/:idManager')
+  async getManager() {}
 
   @Delete('/manager/:idManager')
   async deleteManager() {}
 
+  //Seller
+  @Post('/seller')
+  async createSeller() {}
+
+  @Patch('/seller/:idSeller')
+  async updateSeller() {}
+
+  @Get('/seller')
+  async getSellerList() {}
+
+  @Get('/seller/:idSeller')
+  async getSeller() {}
+
   @Delete('/seller/:idSeller')
   async deleteSeller() {}
 
+  //SellerPremium
+  @Post('/seller-premium')
+  async createSellerPremium() {}
+
+  @Patch('/sellerPremium/:idSellerPremium')
+  async updateSellerPremium() {}
+
+  @Get('/sellerPremium')
+  async getSellerPremiumList() {}
+
+  @Get('/sellerPremium/:idSellerPremium')
+  async getSellerPremium() {}
+
   @Delete('/sellerPremium/:idSellerPremium')
   async deleteSellerPremium() {}
+
+  //Car
+
+  @Post('/car')
+  async createCar() {}
+
+  @Patch('/car')
+  async updateCar() {}
+
+  @Get('/car')
+  async getCarList() {}
+
+  @Get('/car/:idCar')
+  async getCar() {}
+
+  @Delete('/car')
+  async deleteCar() {}
+
+  //додати отримання карів по параметру - хто створив кар
+
+  //Cardealership
+  @Post('/cardealership')
+  async createCardealership() {}
+
+  @Patch('/cardealership/:idCardealership')
+  async updateCardealership() {}
+
+  @Get('/cardealership')
+  async getCardealershipList() {}
+
+  @Get('/cardealership/:idCardealership')
+  async getCardealership() {}
+
+  @Delete('/cardealership/:idCardealership')
+  async deleteCardealership() {}
+
+  //CardealershipAdmin
+  @Post('/cardealershipAdmin')
+  async createCardealershipAdmin() {}
+
+  @Patch('/cardealershipAdmin/:idCardealershipAdmin')
+  async updateCardealershipAdmin() {}
+
+  @Get('/cardealershipAdmin')
+  async getCardealershipAdminList() {}
+
+  @Get('/cardealershipAdmin/:idCardealershipAdmin')
+  async getCardealershipAdmin() {}
+
+  @Delete('/cardealershipAdmin/:idCardealershipAdmin')
+  async deleteCardealershipAdmin() {}
+
+  //CardealershipManager
+  @Post('/cardealershipManager')
+  async createCardealershipManager() {}
+
+  @Patch('/cardealershipManager/:idCardealershipManager')
+  async updateCardealershipManager() {}
+
+  @Get('/cardealershipManager')
+  async getCardealershipManagerList() {}
+
+  @Get('/cardealershipManager/:idCardealershipManager')
+  async getCardealershipManager() {}
+
+  @Delete('/cardealershipManager/:idCardealershipManager')
+  async deleteCardealershipManager() {}
+
+  //CardealershipMechanic
+  @Post('/cardealershipMechanic')
+  async createCardealershipMechanic() {}
+
+  @Patch('/cardealershipMechanic/:idCardealershipMechanic')
+  async updateCardealershipMechanic() {}
+
+  @Get('/cardealershipMechanic')
+  async getCardealershipMechanicList() {}
+
+  @Get('/cardealershipMechanic/:idCardealershipMechanic')
+  async getCardealershipMechanic() {}
+
+  @Delete('/cardealershipMechanic/:idCardealershipMechanic')
+  async deleteCardealershipMechanic() {}
+
+  //CardealershipSales
+  @Post('/cardealershipSales')
+  async createCardealershipSales() {}
+
+  @Patch('/cardealershipSales/:idCardealershipSales')
+  async updateCardealershipSales() {}
+
+  @Get('/cardealershipSales')
+  async getCardealershipSalesList() {}
+
+  @Get('/cardealershipSales/:idCardealershipSales')
+  async getCardealershipSales() {}
+
+  @Delete('/cardealershipSales/:idCardealershipSales')
+  async deleteCardealershipSales() {}
+
+  //CardealershipServiceManager
+  @Post('/cardealershipServiceManager')
+  async createCardealershipServiceManager() {}
+
+  @Patch('/cardealershipServiceManager/:idCardealershipServiceManager')
+  async updateCardealershipServiceManager() {}
+
+  @Get('/cardealershipServiceManager')
+  async getCardealershipServiceManagerList() {}
+
+  @Get('/cardealershipServiceManager/:idCardealershipServiceManager')
+  async getCardealershipServiceManager() {}
+
+  @Delete('/cardealershipServiceManager/:idCardealershipServiceManager')
+  async deleteCardealershipServiceManager() {}
 }

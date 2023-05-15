@@ -11,14 +11,12 @@ import {
 
 import { NoProfanity } from '../../common/decorator/noProfanity.decorator';
 import { UserRole } from '../../common/enum/user-role.enum';
-import { COMPANY_REGEX } from '../../common/regex/company.regex';
 import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
 import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
 import { PASSWORD_REGEX } from '../../common/regex/password.regex';
-import { POSITION_REGEX } from '../../common/regex/position.regex';
 
-export class CreateAdminDto {
-  @ApiProperty({ required: true, example: 'admin@somecompany.com' })
+export class CreateBuyerDto {
+  @ApiProperty({ required: true, example: 'buyer@gmail.com' })
   @IsNotEmpty()
   @IsString()
   @IsEmail()
@@ -34,7 +32,7 @@ export class CreateAdminDto {
   })
   password: string;
 
-  @ApiProperty({ required: true, example: 'Kokos' })
+  @ApiProperty({ required: true, example: 'Jack' })
   @IsNotEmpty()
   @IsString()
   @Matches(FIRSTNAME_REGEX, {
@@ -44,7 +42,7 @@ export class CreateAdminDto {
   @NoProfanity()
   firstName: string;
 
-  @ApiProperty({ required: false, example: 'Kochkin' })
+  @ApiProperty({ required: false, example: 'Daniels' })
   @IsOptional()
   @IsString()
   @Matches(LASTNAME_REGEX, {
@@ -57,15 +55,6 @@ export class CreateAdminDto {
   @ApiPropertyOptional()
   avatar?: string;
 
-  @ApiProperty({ required: true, example: 'SomeCompany' })
-  @IsNotEmpty()
-  @IsString()
-  @Matches(COMPANY_REGEX, {
-    message:
-      'Invalid input. Company name should be SomeCompany or its partners',
-  })
-  company: string;
-
   @ApiProperty({ enum: UserRole })
   @IsNotEmpty()
   role: UserRole;
@@ -75,14 +64,4 @@ export class CreateAdminDto {
   @IsString()
   @IsPhoneNumber()
   phoneNumber: string;
-
-  @ApiProperty({ required: true, example: 'CEO' })
-  @IsNotEmpty()
-  @IsString()
-  @Matches(POSITION_REGEX, {
-    message:
-      'Invalid input. Position must contain at least 2 characters and only letters, spaces, hyphens, apostrophes, and Cyrillic characters are allowed',
-  })
-  @NoProfanity()
-  position: string;
 }
