@@ -8,9 +8,41 @@ import { CreateAdminDto } from './dto/createAdmin.dto';
 export class AdminService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getAdminList() {}
+  async getAdminList(): Promise<Admin[]> {
+    return this.prismaService.admin.findMany({
+      orderBy: {
+        user: {
+          firstName: 'asc',
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
 
-  async getAdmin() {}
+  async getAdminById(idAdmin: string): Promise<Admin> {
+    return this.prismaService.admin.findFirst({
+      where: { id: Number(idAdmin) },
+      select: {
+        id: true,
+        company: true,
+        position: true,
+        createdAt: true,
+        updatedAt: true,
+        user: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+            phoneNumber: true,
+          },
+        },
+        adminId: true,
+      },
+    });
+  }
 
   async createAdmin(adminData: CreateAdminDto): Promise<Admin> {
     return this.prismaService.admin.create({

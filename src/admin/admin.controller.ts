@@ -17,6 +17,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { Admin } from '@prisma/client';
@@ -34,8 +35,25 @@ import { CreateAdminDto } from './dto/createAdmin.dto';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  @ApiParam({ name: 'idAdmin', required: true })
+  @Get('/:idAdmin')
+  async getAdminById(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('idAdmin') idAdmin: string,
+  ): Promise<Admin> {
+    return res
+      .status(HttpStatus.OK)
+      .json(await this.adminService.getAdminById(idAdmin));
+  }
+
+  @ApiResponse({ status: HttpStatus.OK })
   @Get()
-  async getAdminsList() {}
+  async getAdminsList(@Req() reg: any, @Res() res: any): Promise<Admin[]> {
+    return res
+      .status(HttpStatus.OK)
+      .json(await this.adminService.getAdminList());
+  }
 
   @Get('/buyer')
   async getBuyerList() {}
@@ -69,9 +87,6 @@ export class AdminController {
 
   @Get('/sellerPremium')
   async getSellerPremiumList() {}
-
-  @Get('/:idAdmin')
-  async getAdmin() {}
 
   @Get('/buyer/:idBuyer')
   async getBuyer() {}
