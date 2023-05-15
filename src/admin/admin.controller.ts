@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpStatus,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -46,6 +47,28 @@ export class AdminController {
     return res
       .status(HttpStatus.OK)
       .json(await this.adminService.getAdminById(idAdmin));
+  }
+
+  @ApiParam({ name: 'firstName', required: true })
+  @Get('/:firstName')
+  async getAdminByFirstName(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('firstName') firstName: string,
+  ): Promise<Admin> {
+    try {
+      const admin = await this.adminService.getAdminByFirstName(firstName);
+      return res.status(HttpStatus.OK).json(admin);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return res
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: error.message });
+      }
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .json({ message: error.message });
+    }
   }
 
   @ApiResponse({ status: HttpStatus.OK })

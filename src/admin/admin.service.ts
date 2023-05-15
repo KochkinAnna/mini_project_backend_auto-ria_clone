@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Admin } from '@prisma/client';
 
 import { PrismaService } from '../common/orm/prisma.service';
@@ -57,6 +57,39 @@ export class AdminService {
         adminId: true,
       },
     });
+  }
+
+  async getAdminByFirstName(firstName: string): Promise<Admin> {
+    const admin = await this.prismaService.admin.findFirst({
+      where: {
+        user: {
+          firstName: firstName,
+        },
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+            role: true,
+            phoneNumber: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+      },
+    });
+
+    if (!admin) {
+      throw new NotFoundException(
+        `Admin with first name ${firstName} not found`,
+      );
+    }
+
+    return admin;
   }
 
   async createAdmin(adminData: CreateAdminDto): Promise<Admin> {
