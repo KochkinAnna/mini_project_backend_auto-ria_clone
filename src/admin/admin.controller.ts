@@ -29,13 +29,14 @@ import {
 } from '../common/file-upload/file.upload';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/createAdmin.dto';
+import { UpdateAdminDto } from './dto/updateAdmin.dto';
 
 @ApiTags('Admin')
 @Controller('admin')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @ApiParam({ name: 'idAdmin', required: true })
+  @ApiParam({ name: 'idAdmin', type: 'string', description: 'Admin ID' })
   @Get('/:idAdmin')
   async getAdminById(
     @Req() req: any,
@@ -213,10 +214,11 @@ export class AdminController {
   @ApiParam({ name: 'idAdmin', required: true })
   @Patch('/:idAdmin')
   async updateAdmin(
-    @Req() req: any,
-    @Res() res: any,
     @Param('idAdmin') idAdmin: string,
-  ) {}
+    @Body() adminData: UpdateAdminDto,
+  ): Promise<Admin> {
+    return this.adminService.updateAdmin(idAdmin, adminData);
+  }
 
   @Patch('/buyer/:idBuyer')
   async updateBuyer() {}
@@ -269,13 +271,11 @@ export class AdminController {
   @ApiParam({ name: 'idAdmin', required: true })
   @Delete('/:idAdmin')
   async deleteAdmin(
-    @Req() req: any,
-    @Res() res: any,
     @Param('idAdmin') idAdmin: string,
-  ) {
-    return res
-      .status(HttpStatus.OK)
-      .json(await this.adminService.deleteAdmin(idAdmin));
+    @Res() res: any,
+  ): Promise<void> {
+    await this.adminService.deleteAdmin(idAdmin);
+    res.sendStatus(HttpStatus.OK);
   }
 
   @Delete('/buyer/:idBuyer')

@@ -3,6 +3,7 @@ import { Admin } from '@prisma/client';
 
 import { PrismaService } from '../common/orm/prisma.service';
 import { CreateAdminDto } from './dto/createAdmin.dto';
+import { UpdateAdminDto } from './dto/updateAdmin.dto';
 
 @Injectable()
 export class AdminService {
@@ -16,14 +17,28 @@ export class AdminService {
         },
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+            phoneNumber: true,
+          },
+        },
       },
     });
   }
 
   async getAdminById(idAdmin: string): Promise<Admin> {
+    const adminId = parseInt(idAdmin);
+    if (isNaN(adminId)) {
+      throw new Error(`Invalid ID: ${idAdmin}`);
+    }
     return this.prismaService.admin.findFirst({
-      where: { id: Number(idAdmin) },
+      where: {
+        id: adminId,
+      },
       select: {
         id: true,
         company: true,
@@ -64,7 +79,54 @@ export class AdminService {
     });
   }
 
-  async updateAdmin() {}
+  async updateAdmin(
+    idAdmin: string,
+    adminData: UpdateAdminDto,
+  ): Promise<Admin> {
+    const adminId = parseInt(idAdmin);
+    if (isNaN(adminId)) {
+      throw new Error(`Invalid ID: ${idAdmin}`);
+    }
+    return this.prismaService.admin.update({
+      where: {
+        id: adminId,
+      },
+      data: {
+        user: {
+          update: {
+            email: adminData.email,
+            firstName: adminData.firstName,
+            lastName: adminData.lastName,
+            avatar: adminData.avatar,
+            phoneNumber: adminData.phoneNumber,
+          },
+        },
+        company: adminData.company,
+        position: adminData.position,
+      },
+      include: {
+        user: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true,
+            avatar: true,
+            phoneNumber: true,
+          },
+        },
+      },
+    });
+  }
 
-  async deleteAdmin(idAdmin: string) {}
+  async deleteAdmin(idAdmin: string): Promise<Admin> {
+    const adminId = parseInt(idAdmin);
+    if (isNaN(adminId)) {
+      throw new Error(`Invalid ID: ${idAdmin}`);
+    }
+    return this.prismaService.admin.delete({
+      where: {
+        id: adminId,
+      },
+    });
+  }
 }

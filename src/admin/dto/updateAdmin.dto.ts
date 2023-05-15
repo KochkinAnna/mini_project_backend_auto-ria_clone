@@ -1,50 +1,87 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
-  IsBoolean,
   IsEmail,
-  IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
+  Matches,
+  MinLength,
 } from 'class-validator';
 
+import { NoProfanity } from '../../common/decorator/noProfanity.decorator';
+import { UserRole } from '../../common/enum/user-role.enum';
+import { COMPANY_REGEX } from '../../common/regex/company.regex';
+import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
+import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
+import { PASSWORD_REGEX } from '../../common/regex/password.regex';
+import { POSITION_REGEX } from '../../common/regex/position.regex';
+
 export class UpdateAdminDto {
-  @ApiProperty({ required: true, example: 'Evgeniy Kochkin' })
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @ApiProperty({ required: false, example: '33' })
-  @IsOptional()
-  @IsNumber()
-  age: number;
-
-  @ApiProperty({ required: true, example: 'SomeCompany' })
-  @IsNotEmpty()
-  @IsString()
-  company: string;
-
-  @ApiProperty({ required: true, example: 'CEO' })
-  @IsNotEmpty()
-  @IsString()
-  position: string;
-
-  @ApiProperty({ required: false, example: 'admin@somecompany.com' })
+  @ApiPropertyOptional({ example: 'admin@somecompany.com' })
   @IsOptional()
   @IsString()
   @IsEmail()
-  email: string;
+  email?: string;
 
-  @ApiProperty({ required: false, example: '+380500554471' })
+  @ApiPropertyOptional({ example: 'MyPassw0rd!_' })
   @IsOptional()
   @IsString()
-  phone: string;
+  @MinLength(8)
+  @Matches(PASSWORD_REGEX, {
+    message:
+      'Invalid input. The password must contain at least one uppercase and lowercase letter, one digit, one special character, and its length must be at least 8 characters',
+  })
+  password?: string;
 
-  @ApiProperty({ required: false, example: true })
+  @ApiPropertyOptional({ example: 'Kokos' })
   @IsOptional()
-  @IsBoolean()
-  status: boolean;
-}
+  @IsString()
+  @Matches(FIRSTNAME_REGEX, {
+    message:
+      'Invalid input. First name must contain at least 2 characters and only letters, spaces, hyphens, apostrophes, and Cyrillic characters are allowed',
+  })
+  @NoProfanity()
+  firstName?: string;
 
-//name, age, company, position, email, phone, status
+  @ApiPropertyOptional({ example: 'Kochkin' })
+  @IsOptional()
+  @IsString()
+  @Matches(LASTNAME_REGEX, {
+    message:
+      'Invalid input. Last name must contain at least 2 characters and only letters, spaces, hyphens, apostrophes, and Cyrillic characters are allowed',
+  })
+  @NoProfanity()
+  lastName?: string;
+
+  @ApiPropertyOptional()
+  avatar?: string;
+
+  @ApiPropertyOptional({ example: 'SomeCompany' })
+  @IsOptional()
+  @IsString()
+  @Matches(COMPANY_REGEX, {
+    message:
+      'Invalid input. Company name should be SomeCompany or its partners',
+  })
+  company?: string;
+
+  @ApiPropertyOptional({ enum: UserRole })
+  @IsOptional()
+  role?: UserRole;
+
+  @ApiPropertyOptional({ example: '+380500554417' })
+  @IsOptional()
+  @IsString()
+  @IsPhoneNumber()
+  phoneNumber?: string;
+
+  @ApiPropertyOptional({ example: 'CEO' })
+  @IsOptional()
+  @IsString()
+  @Matches(POSITION_REGEX, {
+    message:
+      'Invalid input. Position must contain at least 2 characters and only letters, spaces, hyphens, apostrophes, and Cyrillic characters are allowed',
+  })
+  @NoProfanity()
+  position?: string;
+}
