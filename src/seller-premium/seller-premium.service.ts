@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { PremiumSeller } from '@prisma/client';
 
 import { Period } from '../common/enum/views-period.enum';
 import { PrismaService } from '../common/orm/prisma.service';
@@ -7,7 +8,7 @@ import { PrismaService } from '../common/orm/prisma.service';
 export class SellerPremiumService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async upgradeToPremium(sellerId: string): Promise<void> {
+  async upgradeToPremium(sellerId: string): Promise<PremiumSeller> {
     const seller = await this.prismaService.seller.findUnique({
       where: { id: parseInt(sellerId) },
       include: { premiumSeller: true },
@@ -16,18 +17,27 @@ export class SellerPremiumService {
       throw new NotFoundException('Seller not found');
     }
 
+    let updatedPremiumSeller: PremiumSeller;
+
     if (!seller.premiumSeller) {
-      await this.prismaService.premiumSeller.create({
-        data: { user: { connect: { id: seller.userId } } },
+      updatedPremiumSeller = await this.prismaService.premiumSeller.upsert({
+        where: { sellerId: seller.id },
+        create: {
+          sellerId: seller.id,
+          views: 1,
+        },
+        update: {
+          views: 1,
+        },
+      });
+    } else {
+      updatedPremiumSeller = await this.prismaService.premiumSeller.update({
+        where: { id: seller.premiumSeller.id },
+        data: { views: seller.premiumSeller.views + 1 },
       });
     }
 
-    await this.prismaService.seller.update({
-      where: { id: parseInt(sellerId) },
-      data: {
-        premiumSeller: { update: { views: seller.premiumSeller.views + 1 } },
-      },
-    });
+    return updatedPremiumSeller;
   }
 
   async cancelPremium(sellerId: string): Promise<void> {
@@ -47,7 +57,7 @@ export class SellerPremiumService {
 
     await this.prismaService.seller.update({
       where: { id: parseInt(sellerId) },
-      data: { premiumSeller: null },
+      data: { premiumSeller: undefined },
     });
   }
 

@@ -8,8 +8,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import CreateCarDto from '../../car/dto/createCar.dto';
+
 import { UserRole } from '../../common/enum/user-role.enum';
+import CreateCarDto from '../../car/dto/createCar.dto';
 
 class CreateSellerDto {
   @ApiProperty({ required: true, example: 'John' })
@@ -27,7 +28,7 @@ class CreateSellerDto {
   @IsString()
   email: string;
 
-  @ApiProperty({ required: true, example: 'password123' })
+  @ApiProperty({ required: true, example: 'Abc12345' })
   @IsNotEmpty()
   @IsString()
   password: string;

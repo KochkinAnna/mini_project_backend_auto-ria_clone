@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Car, Seller } from '@prisma/client';
 
-import CreateCarDto from '../car/dto/createCar.dto';
 import UpdateCarDto from '../car/dto/updateCar.dto';
 import { PrismaService } from '../common/orm/prisma.service';
 import { Currency } from '../common/type/currancy.type';
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
+import CreateCarDto from '../car/dto/createCar.dto';
 
 @Injectable()
 export class SellerService {
@@ -113,6 +113,7 @@ export class SellerService {
       },
       include: {
         user: true,
+        premiumSeller: true,
       },
     });
   }
@@ -140,7 +141,7 @@ export class SellerService {
 
     const seller = await this.prismaService.seller.findUnique({
       where: {
-        id: sellerId,
+        userId: sellerId,
       },
     });
 
@@ -152,19 +153,23 @@ export class SellerService {
       data: {
         brand: carData.brand,
         model: carData.model,
-        year: parseInt(carData.year),
+        year: carData.year,
         region: carData.region,
-        mileage: parseInt(carData.mileage),
-        price: parseInt(carData.price),
+        mileage: carData.mileage,
+        price: carData.price,
         currency: carData.currency as Currency,
         description: carData.description,
         image: carData.image,
         seller: {
           connect: {
-            id: sellerId,
+            id: seller.id,
           },
         },
-        owner: undefined,
+        owner: {
+          connect: {
+            id: seller.id,
+          },
+        },
       },
     });
   }
@@ -203,10 +208,10 @@ export class SellerService {
       data: {
         brand: carData.brand,
         model: carData.model,
-        year: parseInt(carData.year),
+        year: carData.year,
         region: carData.region,
-        mileage: parseInt(carData.mileage),
-        price: parseInt(carData.price),
+        mileage: carData.mileage,
+        price: carData.price,
         currency: carData.currency as Currency,
         description: carData.description,
         image: carData.image,

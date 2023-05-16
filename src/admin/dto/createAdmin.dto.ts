@@ -24,7 +24,7 @@ export class CreateAdminDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ required: true, example: 'MyPassw0rd!_' })
+  @ApiProperty({ required: true, example: 'Abc12345' })
   @IsNotEmpty()
   @IsString()
   @MinLength(8)

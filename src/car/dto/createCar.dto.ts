@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsNotEmpty, IsString } from 'class-validator';
+import { IsIn, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 class CreateCarDto {
   @ApiProperty({ required: true, example: 'BMW' })
@@ -12,25 +12,25 @@ class CreateCarDto {
   @IsString()
   model: string;
 
-  @ApiProperty({ required: true, example: '2022' })
+  @ApiProperty({ required: true, example: 2022 })
+  @IsInt()
   @IsNotEmpty()
-  @IsString()
-  year: string;
+  year: number;
 
   @ApiProperty({ required: true, example: 'Ivano-Frankivsk' })
   @IsNotEmpty()
   @IsString()
   region: string;
 
-  @ApiProperty({ required: true, example: '10000' })
+  @ApiProperty({ required: true, example: 10000 })
+  @IsInt()
   @IsNotEmpty()
-  @IsString()
-  mileage: string;
+  mileage: number;
 
-  @ApiProperty({ required: true, example: '50000' })
+  @ApiProperty({ required: true, example: 50000 })
+  @IsInt()
   @IsNotEmpty()
-  @IsString()
-  price: string;
+  price: number;
 
   @ApiProperty({ required: true, example: 'USD' })
   @IsNotEmpty()
@@ -38,7 +38,8 @@ class CreateCarDto {
   @IsIn(['USD', 'EUR', 'UAH'])
   currency: string;
 
-  @ApiProperty({ required: true, example: 'This is a car description' })
+  @ApiProperty({ required: false, example: 'This is a car description' })
+  @IsOptional()
   @IsString()
   description?: string;
 

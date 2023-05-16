@@ -21,7 +21,7 @@ export class UpdateBuyerDto {
   @IsEmail()
   email?: string;
 
-  @ApiPropertyOptional({ example: 'MyPassw0rd!_' })
+  @ApiPropertyOptional({ example: 'Abc12345' })
   @IsOptional()
   @IsString()
   @MinLength(8)

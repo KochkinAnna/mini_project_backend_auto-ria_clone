@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsIn, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 class UpdateCarDto {
   @ApiProperty({ required: false, example: 'BMW' })
@@ -12,25 +12,25 @@ class UpdateCarDto {
   @IsString()
   model?: string;
 
-  @ApiProperty({ required: false, example: '2022' })
+  @ApiProperty({ required: false, example: 2022 })
   @IsOptional()
-  @IsString()
-  year?: string;
+  @IsInt()
+  year?: number;
 
-  @ApiProperty({ required: true, example: 'Ivano-Frankivsk' })
+  @ApiProperty({ required: false, example: 'Ivano-Frankivsk' })
   @IsOptional()
   @IsString()
   region?: string;
 
-  @ApiProperty({ required: false, example: '10000' })
+  @ApiProperty({ required: false, example: 10000 })
   @IsOptional()
-  @IsString()
-  mileage?: string;
+  @IsInt()
+  mileage?: number;
 
-  @ApiProperty({ required: false, example: '50000' })
+  @ApiProperty({ required: false, example: 50000 })
   @IsOptional()
-  @IsString()
-  price?: string;
+  @IsInt()
+  price?: number;
 
   @ApiProperty({ required: false, example: 'USD' })
   @IsOptional()
@@ -38,15 +38,13 @@ class UpdateCarDto {
   @IsIn(['USD', 'EUR', 'UAH'])
   currency?: string;
 
-  @ApiProperty({
-    required: false,
-    example: 'This is an updated car description',
-  })
+  @ApiProperty({ required: false, example: 'This is a car description' })
   @IsOptional()
   @IsString()
   description?: string;
 
   @ApiProperty({ required: false })
+  @IsOptional()
   image?: string;
 }
 

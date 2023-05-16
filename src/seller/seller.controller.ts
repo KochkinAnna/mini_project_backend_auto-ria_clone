@@ -15,6 +15,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -25,7 +26,7 @@ import { Seller } from '@prisma/client';
 import { Car } from '@prisma/client';
 import { diskStorage } from 'multer';
 
-import CreateCarDto from '../car/dto/createCar.dto';
+
 import {
   editFileName,
   imageFileFilter,
@@ -33,6 +34,8 @@ import {
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
 import { SellerService } from './seller.service';
+import UpdateCarDto from '../car/dto/updateCar.dto';
+import CreateCarDto from '../car/dto/createCar.dto';
 
 @ApiTags('Seller')
 @Controller('seller')
@@ -140,7 +143,7 @@ export class SellerController {
   }
 
   @ApiOperation({ summary: 'Create a new car by seller' })
-  @ApiOkResponse({ type: CreateCarDto })
+  @ApiCreatedResponse({ type: CreateCarDto })
   @Post('/:idSeller/car')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -180,7 +183,7 @@ export class SellerController {
   async updateCarBySeller(
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,
-    @Body() carData: CreateCarDto, // Змінено тип на CreateCarDto
+    @Body() carData: UpdateCarDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Car> {
     if (file) {

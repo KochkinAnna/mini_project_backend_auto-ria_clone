@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import {
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 import UpdateCarDto from '../../car/dto/updateCar.dto';
 import { UserRole } from '../../common/enum/user-role.enum';
@@ -21,7 +25,7 @@ class UpdateSellerDto {
   @IsString()
   email?: string;
 
-  @ApiProperty({ required: false, example: 'password123' })
+  @ApiProperty({ required: false, example: 'Abc12345' })
   @IsOptional()
   @IsString()
   password?: string;
@@ -31,7 +35,7 @@ class UpdateSellerDto {
   @IsString()
   phoneNumber?: string;
 
-  @ApiProperty({ required: false})
+  @ApiProperty({ required: false })
   avatar?: string;
 
   @ApiProperty({ enum: UserRole })
