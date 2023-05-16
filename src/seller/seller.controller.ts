@@ -26,7 +26,6 @@ import { Car } from '@prisma/client';
 import { diskStorage } from 'multer';
 
 import CreateCarDto from '../car/dto/createCar.dto';
-import UpdateCarDto from '../car/dto/updateCar.dto';
 import {
   editFileName,
   imageFileFilter,

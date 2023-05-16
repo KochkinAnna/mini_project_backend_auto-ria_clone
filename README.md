@@ -114,7 +114,7 @@ The backend is integrated with AWS for cloud storage and other services. You can
 
 ----
 ## Contributing
-If you would like to contribute to the project, feel free to submit a pull request. Please follow the existing code style and do not break it :) 
+If you would like to contribute to the project, feel free to submit a pull request. Please follow the existing code style and enjoy :) 
 
 ----
 ## Future Improvements
