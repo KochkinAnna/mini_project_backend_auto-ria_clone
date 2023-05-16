@@ -1,5 +1,5 @@
-enum Period {
-  Day = 'day',
-  Week = 'week',
-  Month = 'month',
+export enum Period {
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
 }

@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Car, Seller } from '@prisma/client';
 
 import CreateCarDto from '../car/dto/createCar.dto';
+import UpdateCarDto from '../car/dto/updateCar.dto';
 import { PrismaService } from '../common/orm/prisma.service';
 import { Currency } from '../common/type/currancy.type';
 import CreateSellerDto from './dto/createSeller.dto';
@@ -152,6 +153,7 @@ export class SellerService {
         brand: carData.brand,
         model: carData.model,
         year: parseInt(carData.year),
+        region: carData.region,
         mileage: parseInt(carData.mileage),
         price: parseInt(carData.price),
         currency: carData.currency as Currency,
@@ -170,7 +172,7 @@ export class SellerService {
   async updateCarBySeller(
     idSeller: string,
     idCar: string,
-    carData: CreateCarDto,
+    carData: UpdateCarDto,
   ): Promise<Car> {
     const sellerId = parseInt(idSeller);
     const carId = parseInt(idCar);
@@ -202,6 +204,7 @@ export class SellerService {
         brand: carData.brand,
         model: carData.model,
         year: parseInt(carData.year),
+        region: carData.region,
         mileage: parseInt(carData.mileage),
         price: parseInt(carData.price),
         currency: carData.currency as Currency,

@@ -1,6 +1,7 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
+import { Period } from '../common/enum/views-period.enum';
 import { SellerPremiumService } from './seller-premium.service';
 
 @ApiTags('Seller Premium')

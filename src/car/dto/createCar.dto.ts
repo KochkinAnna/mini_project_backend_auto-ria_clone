@@ -17,6 +17,11 @@ class CreateCarDto {
   @IsString()
   year: string;
 
+  @ApiProperty({ required: true, example: 'Ivano-Frankivsk' })
+  @IsNotEmpty()
+  @IsString()
+  region: string;
+
   @ApiProperty({ required: true, example: '10000' })
   @IsNotEmpty()
   @IsString()
@@ -37,7 +42,7 @@ class CreateCarDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ required: true})
+  @ApiProperty({ required: true })
   image: string;
 }
 

@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Manager } from '@prisma/client';
 
+import { UserRole } from '../common/enum/user-role.enum';
 import { PrismaService } from '../common/orm/prisma.service';
 import { CreateManagerDto } from './dto/createManager.dto';
 import { UpdateManagerDto } from './dto/updateManager.dto';
-import { UserRole } from '../common/enum/user-role.enum';
 
 @Injectable()
 export class ManagerService {

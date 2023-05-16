@@ -17,6 +17,11 @@ class UpdateCarDto {
   @IsString()
   year?: string;
 
+  @ApiProperty({ required: true, example: 'Ivano-Frankivsk' })
+  @IsOptional()
+  @IsString()
+  region?: string;
+
   @ApiProperty({ required: false, example: '10000' })
   @IsOptional()
   @IsString()
@@ -41,7 +46,7 @@ class UpdateCarDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ required: false})
+  @ApiProperty({ required: false })
   image?: string;
 }
 

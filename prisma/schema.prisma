@@ -75,7 +75,7 @@ model Seller {
   user          User           @relation(fields: [userId], references: [id])
   userId        Int            @unique
   cars          Car[]          @relation("SellerCars")
-  premiumSeller PremiumSeller?
+  premiumSeller PremiumSeller
   Car           Car?
 }
 
@@ -99,6 +99,7 @@ model Car {
   brand                String
   model                String
   year                 Int
+  region               String
   mileage              Float
   price                Float
   currency             String

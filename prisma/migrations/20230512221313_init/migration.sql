@@ -79,6 +79,7 @@ CREATE TABLE `Car` (
     `brand` VARCHAR(191) NOT NULL,
     `model` VARCHAR(191) NOT NULL,
     `year` INTEGER NOT NULL,
+    `region` VARCHAR(191) NOT NULL,
     `mileage` DOUBLE NOT NULL,
     `price` DOUBLE NOT NULL,
     `currency` VARCHAR(191) NOT NULL,

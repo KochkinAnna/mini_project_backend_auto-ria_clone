@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
+import { Period } from '../common/enum/views-period.enum';
 import { PrismaService } from '../common/orm/prisma.service';
 
 @Injectable()
@@ -97,7 +98,7 @@ export class SellerPremiumService {
   async getAveragePriceRegion(sellerId: string): Promise<number | null> {
     const seller = await this.prismaService.seller.findUnique({
       where: { id: parseInt(sellerId) },
-      include: { premiumSeller: true, cars: { include: { region: true } } },
+      include: { premiumSeller: true, cars: { include: { seller: true } } },
     });
 
     if (!seller) {
