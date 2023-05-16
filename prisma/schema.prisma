@@ -71,19 +71,21 @@ model Buyer {
 }
 
 model Seller {
-  id            Int            @id @default(autoincrement())
-  user          User           @relation(fields: [userId], references: [id])
-  userId        Int            @unique
-  cars          Car[]          @relation("SellerCars")
-  premiumSeller PremiumSeller?
-  car           Car?
+  id              Int            @id @default(autoincrement())
+  user            User           @relation(fields: [userId], references: [id])
+  userId          Int            @unique
+  cars            Car[]          @relation("SellerCars")
+  premiumSeller   PremiumSeller?
+  premiumSellerId Int?
+  carCount        Int            @default(0)
+  car             Car?
 }
 
 model PremiumSeller {
   id                  Int    @id @default(autoincrement())
-  user                Seller @relation(fields: [sellerId], references: [id])
+  seller              Seller @relation(fields: [sellerId], references: [id])
   sellerId            Int    @unique
-  cars                Car[]
+  cars                Car[]  @relation("PremiumSellerCars")
   views               Int    @default(0)
   viewsPerDay         Int?
   viewsPerWeek        Int?
@@ -113,7 +115,7 @@ model Car {
   views                Int                 @default(0)
   seller               Seller              @relation("SellerCars", fields: [sellerId], references: [id])
   sellerId             Int                 @unique
-  premiumSeller        PremiumSeller?      @relation(fields: [premiumSellerId], references: [id])
+  premiumSeller        PremiumSeller?      @relation("PremiumSellerCars", fields: [premiumSellerId], references: [id])
   premiumSellerId      Int?
   CardealershipSales   CardealershipSales? @relation(fields: [cardealershipSalesId], references: [id])
   cardealershipSalesId Int?

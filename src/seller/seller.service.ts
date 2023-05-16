@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Car, Seller } from '@prisma/client';
 
+import CreateCarDto from '../car/dto/createCar.dto';
 import UpdateCarDto from '../car/dto/updateCar.dto';
 import { PrismaService } from '../common/orm/prisma.service';
 import { Currency } from '../common/type/currancy.type';
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
-import CreateCarDto from '../car/dto/createCar.dto';
 
 @Injectable()
 export class SellerService {
@@ -149,7 +149,11 @@ export class SellerService {
       throw new NotFoundException(`Seller with ID ${idSeller} not found`);
     }
 
-    return this.prismaService.car.create({
+    if (seller.carCount >= 1 && !seller.premiumSellerId) {
+      throw new Error('An ordinary seller can have only one car');
+    }
+
+    const car = await this.prismaService.car.create({
       data: {
         brand: carData.brand,
         model: carData.model,
@@ -172,6 +176,13 @@ export class SellerService {
         },
       },
     });
+
+    await this.prismaService.seller.update({
+      where: { id: seller.id },
+      data: { carCount: seller.carCount + 1 },
+    });
+
+    return car;
   }
 
   async updateCarBySeller(

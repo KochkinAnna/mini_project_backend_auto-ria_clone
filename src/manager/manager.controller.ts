@@ -29,8 +29,8 @@ import {
   imageFileFilter,
 } from '../common/file-upload/file.upload';
 import { CreateManagerDto } from './dto/createManager.dto';
-import { ManagerService } from './manager.service';
 import { UpdateManagerDto } from './dto/updateManager.dto';
+import { ManagerService } from './manager.service';
 
 @ApiTags('Manager')
 @Controller('manager')

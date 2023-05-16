@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import UpdateCarDto from '../../car/dto/updateCar.dto';
 import { UserRole } from '../../common/enum/user-role.enum';

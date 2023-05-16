@@ -30,6 +30,11 @@ export class SellerPremiumService {
           views: 1,
         },
       });
+
+      await this.prismaService.seller.update({
+        where: { id: seller.id },
+        data: { premiumSellerId: updatedPremiumSeller.id },
+      });
     } else {
       updatedPremiumSeller = await this.prismaService.premiumSeller.update({
         where: { id: seller.premiumSeller.id },

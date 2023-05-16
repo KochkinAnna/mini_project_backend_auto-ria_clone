@@ -26,7 +26,8 @@ import { Seller } from '@prisma/client';
 import { Car } from '@prisma/client';
 import { diskStorage } from 'multer';
 
-
+import CreateCarDto from '../car/dto/createCar.dto';
+import UpdateCarDto from '../car/dto/updateCar.dto';
 import {
   editFileName,
   imageFileFilter,
@@ -34,8 +35,6 @@ import {
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
 import { SellerService } from './seller.service';
-import UpdateCarDto from '../car/dto/updateCar.dto';
-import CreateCarDto from '../car/dto/createCar.dto';
 
 @ApiTags('Seller')
 @Controller('seller')

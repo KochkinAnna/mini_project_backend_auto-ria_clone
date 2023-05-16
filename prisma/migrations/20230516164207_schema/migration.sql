@@ -9,7 +9,7 @@ CREATE TABLE `User` (
     `role` ENUM('ADMIN', 'BUYER', 'CARDEALERSHIP_ADMIN', 'CARDEALERSHIP_MANAGER', 'CARDEALERSHIP_MECHANIC', 'CARDEALERSHIP_SALES', 'CARDEALERSHIP_SERVICE_MANAGER', 'MANAGER', 'SELLER', 'SELLER_PREMIUM') NOT NULL DEFAULT 'BUYER',
     `phoneNumber` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
+    `updatedAt` DATETIME(3) NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)
@@ -32,8 +32,6 @@ CREATE TABLE `Admin` (
 CREATE TABLE `Manager` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `managerId` INTEGER NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updatedAt` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `Manager_managerId_key`(`managerId`),
     PRIMARY KEY (`id`)
@@ -52,6 +50,8 @@ CREATE TABLE `Buyer` (
 CREATE TABLE `Seller` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `userId` INTEGER NOT NULL,
+    `premiumSellerId` INTEGER NULL,
+    `carCount` INTEGER NOT NULL DEFAULT 0,
 
     UNIQUE INDEX `Seller_userId_key`(`userId`),
     PRIMARY KEY (`id`)
@@ -92,12 +92,11 @@ CREATE TABLE `Car` (
     `checkedAt` DATETIME(3) NULL,
     `views` INTEGER NOT NULL DEFAULT 0,
     `sellerId` INTEGER NOT NULL,
-    `premiumSellerId` INTEGER NOT NULL,
+    `premiumSellerId` INTEGER NULL,
     `cardealershipSalesId` INTEGER NULL,
 
     UNIQUE INDEX `Car_ownerId_key`(`ownerId`),
     UNIQUE INDEX `Car_sellerId_key`(`sellerId`),
-    UNIQUE INDEX `Car_premiumSellerId_key`(`premiumSellerId`),
     INDEX `ownerId`(`ownerId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -208,7 +207,7 @@ ALTER TABLE `Car` ADD CONSTRAINT `Car_ownerId_fkey` FOREIGN KEY (`ownerId`) REFE
 ALTER TABLE `Car` ADD CONSTRAINT `Car_sellerId_fkey` FOREIGN KEY (`sellerId`) REFERENCES `Seller`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Car` ADD CONSTRAINT `Car_premiumSellerId_fkey` FOREIGN KEY (`premiumSellerId`) REFERENCES `PremiumSeller`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Car` ADD CONSTRAINT `Car_premiumSellerId_fkey` FOREIGN KEY (`premiumSellerId`) REFERENCES `PremiumSeller`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Car` ADD CONSTRAINT `Car_cardealershipSalesId_fkey` FOREIGN KEY (`cardealershipSalesId`) REFERENCES `CardealershipSales`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
