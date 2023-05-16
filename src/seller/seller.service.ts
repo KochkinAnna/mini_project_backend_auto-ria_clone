@@ -220,7 +220,11 @@ export class SellerService {
             id: sellerId,
           },
         },
-        owner: undefined,
+        owner: {
+          connect: {
+            id: seller.id,
+          },
+        },
       },
     });
   }
