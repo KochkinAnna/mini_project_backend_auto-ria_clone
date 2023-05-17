@@ -340,7 +340,7 @@ export class AdminController {
 
   @ApiOperation({ summary: 'Get a manager by first name' })
   @ApiParam({ name: 'firstName', required: true })
-  @Get('/manager/:firstName')
+  @Get('/manager/name/:firstName')
   async getManagerByFirstName(
     @Req() req: any,
     @Res() res: any,
@@ -363,7 +363,7 @@ export class AdminController {
 
   @ApiOperation({ summary: 'Get a list of managers' })
   @ApiResponse({ status: HttpStatus.OK })
-  @Get('/manager')
+  @Get('/managers/list')
   async getManagerList(@Req() reg: any, @Res() res: any): Promise<Manager[]> {
     return res
       .status(HttpStatus.OK)
@@ -446,7 +446,7 @@ export class AdminController {
 
   @ApiOperation({ summary: 'Get a manager by first name by Admin' })
   @ApiParam({ name: 'firstName', required: true })
-  @Get('/seller/:firstName')
+  @Get('/seller/name/:firstName')
   async getSellerByFirstName(
     @Req() req: any,
     @Res() res: any,
@@ -469,7 +469,7 @@ export class AdminController {
 
   @ApiOperation({ summary: 'Get a list of sallers by Admin' })
   @ApiResponse({ status: HttpStatus.OK })
-  @Get('/seller')
+  @Get('/sellers/list')
   async getSellerList(@Req() reg: any, @Res() res: any): Promise<Seller[]> {
     return res
       .status(HttpStatus.OK)
@@ -484,105 +484,6 @@ export class AdminController {
     @Res() res: any,
   ): Promise<void> {
     await this.sellerService.deleteSeller(idSeller);
-    res.sendStatus(HttpStatus.OK);
-  }
-
-  //Car
-  @ApiOperation({ summary: 'Create a new car by Admin' })
-  @ApiCreatedResponse({ type: CreateCarDto })
-  @Post('/car/:idSeller/car')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './public',
-        filename: editFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
-  )
-  async createCar(
-    @Req() req: any,
-    @Param('idSeller') idSeller: string,
-    @Body() carData: CreateCarDto,
-    @Res() res: any,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<CreateCarDto> {
-    if (file) {
-      carData.image = `public/${file.filename}`;
-    }
-    return res
-      .status(HttpStatus.CREATED)
-      .json(await this.sellerService.createCar(idSeller, carData));
-  }
-
-  @ApiOperation({ summary: 'Update a car by Admin' })
-  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
-  @Patch('/car/:idSeller/car/:idCar')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './public',
-        filename: editFileName,
-      }),
-      fileFilter: imageFileFilter,
-    }),
-  )
-  async updateCar(
-    @Param('idSeller') idSeller: string,
-    @Param('idCar') idCar: string,
-    @Body() carData: UpdateCarDto,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<Car> {
-    if (file) {
-      carData.image = `public/${file.filename}`;
-    }
-    return this.sellerService.updateCar(idSeller, idCar, carData);
-  }
-
-  @ApiOperation({ summary: 'Get all cars by Admin' })
-  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
-  @Get('/cars')
-  async getAllCars(@Req() req: any, @Res() res: any): Promise<Car[]> {
-    return res.status(HttpStatus.OK).json(await this.adminService.getCars());
-  }
-
-  @ApiOperation({ summary: 'Get all seller cars by Admin' })
-  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
-  @Get('/car/:idSeller/car')
-  async getCars(
-    @Req() req: any,
-    @Res() res: any,
-    @Param('idSeller') idSeller: string,
-  ): Promise<Car[]> {
-    return res
-      .status(HttpStatus.OK)
-      .json(await this.sellerService.getCars(idSeller));
-  }
-
-  @ApiOperation({ summary: 'Get a car by Admin' })
-  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
-  @Get('/car/:idSeller/car/:idCar')
-  async getCar(
-    @Req() req: any,
-    @Res() res: any,
-    @Param('idSeller') idSeller: string,
-    @Param('idCar') idCar: string,
-  ): Promise<Car> {
-    return res
-      .status(HttpStatus.OK)
-      .json(await this.sellerService.getCar(idSeller, idCar));
-  }
-
-  @ApiOperation({ summary: 'Delete a car by Admin' })
-  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
-  @ApiParam({ name: 'idCar', type: 'string', description: 'Car ID' })
-  @Delete('/car/:idSeller/car/:idCar')
-  async deleteCar(
-    @Param('idSeller') idSeller: string,
-    @Param('idCar') idCar: string,
-    @Res() res: any,
-  ): Promise<void> {
-    await this.sellerService.deleteCar(idSeller, idCar);
     res.sendStatus(HttpStatus.OK);
   }
 
@@ -635,6 +536,105 @@ export class AdminController {
     @Param('sellerId') sellerId: string,
   ): Promise<number | null> {
     return this.sellerPremiumService.getAveragePriceUkraine(sellerId);
+  }
+
+  //Car
+  @ApiOperation({ summary: 'Create a new car by Admin' })
+  @ApiCreatedResponse({ type: CreateCarDto })
+  @Post('/new/:idSeller/car')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './public',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async createCar(
+    @Req() req: any,
+    @Param('idSeller') idSeller: string,
+    @Body() carData: CreateCarDto,
+    @Res() res: any,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<CreateCarDto> {
+    if (file) {
+      carData.image = `public/${file.filename}`;
+    }
+    return res
+      .status(HttpStatus.CREATED)
+      .json(await this.sellerService.createCar(idSeller, carData));
+  }
+
+  @ApiOperation({ summary: 'Update a car by Admin' })
+  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
+  @Patch('/update/seller/:idSeller/car/:idCar')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './public',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async updateCar(
+    @Param('idSeller') idSeller: string,
+    @Param('idCar') idCar: string,
+    @Body() carData: UpdateCarDto,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Car> {
+    if (file) {
+      carData.image = `public/${file.filename}`;
+    }
+    return this.sellerService.updateCar(idSeller, idCar, carData);
+  }
+
+  @ApiOperation({ summary: 'Get all cars by Admin' })
+  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
+  @Get('/cars/all')
+  async getAllCars(@Req() req: any, @Res() res: any): Promise<Car[]> {
+    return res.status(HttpStatus.OK).json(await this.adminService.getCars());
+  }
+
+  @ApiOperation({ summary: 'Get all seller cars by Admin' })
+  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
+  @Get('/seller/:idSeller/car')
+  async getCars(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('idSeller') idSeller: string,
+  ): Promise<Car[]> {
+    return res
+      .status(HttpStatus.OK)
+      .json(await this.sellerService.getCars(idSeller));
+  }
+
+  @ApiOperation({ summary: 'Get a car by Admin' })
+  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
+  @Get('/seller/:idSeller/car/:idCar')
+  async getCar(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('idSeller') idSeller: string,
+    @Param('idCar') idCar: string,
+  ): Promise<Car> {
+    return res
+      .status(HttpStatus.OK)
+      .json(await this.sellerService.getCar(idSeller, idCar));
+  }
+
+  @ApiOperation({ summary: 'Delete a car by Admin' })
+  @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
+  @ApiParam({ name: 'idCar', type: 'string', description: 'Car ID' })
+  @Delete('/seller/:idSeller/car/:idCar')
+  async deleteCar(
+    @Param('idSeller') idSeller: string,
+    @Param('idCar') idCar: string,
+    @Res() res: any,
+  ): Promise<void> {
+    await this.sellerService.deleteCar(idSeller, idCar);
+    res.sendStatus(HttpStatus.OK);
   }
 
   //Cardealership
