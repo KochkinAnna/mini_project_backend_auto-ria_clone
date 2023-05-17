@@ -317,4 +317,15 @@ export class SellerService {
       },
     });
   }
+
+  async findSellerByEmail(sellerEmail: string, include: any) {
+    return this.prismaService.seller.findFirst({
+      where: {
+        user: {
+          email: sellerEmail,
+        },
+      },
+      include,
+    });
+  }
 }

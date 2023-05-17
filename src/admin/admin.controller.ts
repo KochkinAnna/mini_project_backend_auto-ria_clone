@@ -15,7 +15,10 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from '@nestjs/platform-express';
 import {
   ApiCreatedResponse,
   ApiOkResponse,

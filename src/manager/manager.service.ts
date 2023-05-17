@@ -167,4 +167,15 @@ export class ManagerService {
       },
     });
   }
+
+  async findManagerByEmail(managerEmail: string, include: any) {
+    return this.prismaService.manager.findFirst({
+      where: {
+        user: {
+          email: managerEmail,
+        },
+      },
+      include,
+    });
+  }
 }
