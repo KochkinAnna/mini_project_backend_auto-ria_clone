@@ -276,7 +276,7 @@ export class AdminController {
   }
 
   //Manager
-  @ApiOperation({ summary: 'Create a new manager' })
+  @ApiOperation({ summary: 'Create a new manager by Admin' })
   @ApiOkResponse({ type: CreateManagerDto })
   @Post('/manager')
   @UseInterceptors(
@@ -302,7 +302,7 @@ export class AdminController {
       .json(await this.managerService.createManager(managerData));
   }
 
-  @ApiOperation({ summary: 'Update a manager' })
+  @ApiOperation({ summary: 'Update a manager by Admin' })
   @ApiParam({ name: 'idManager', required: true })
   @Patch('/manager/:idManager')
   @UseInterceptors(
@@ -325,7 +325,7 @@ export class AdminController {
     return this.managerService.updateManager(idManager, managerData);
   }
 
-  @ApiOperation({ summary: 'Get a manager by ID' })
+  @ApiOperation({ summary: 'Get a manager by ID by Admin' })
   @ApiParam({ name: 'idmManager', type: 'string', description: 'Manager ID' })
   @Get('/manager/:idManager')
   async getManagerById(
@@ -338,7 +338,7 @@ export class AdminController {
       .json(await this.managerService.getManagerById(idManager));
   }
 
-  @ApiOperation({ summary: 'Get a manager by first name' })
+  @ApiOperation({ summary: 'Get a manager by first name by Admin' })
   @ApiParam({ name: 'firstName', required: true })
   @Get('/manager/name/:firstName')
   async getManagerByFirstName(
@@ -361,7 +361,7 @@ export class AdminController {
     }
   }
 
-  @ApiOperation({ summary: 'Get a list of managers' })
+  @ApiOperation({ summary: 'Get a list of managers by Admin' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get('/managers/list')
   async getManagerList(@Req() reg: any, @Res() res: any): Promise<Manager[]> {
@@ -370,7 +370,7 @@ export class AdminController {
       .json(await this.managerService.getManagerList());
   }
 
-  @ApiOperation({ summary: 'Delete a manager' })
+  @ApiOperation({ summary: 'Delete a manager by Admin' })
   @ApiParam({ name: 'idManager', required: true })
   @Delete('/manager/:idManager')
   async deleteManager(

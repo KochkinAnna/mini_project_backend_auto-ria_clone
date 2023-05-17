@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PremiumSeller } from '@prisma/client';
+import { Car, PremiumSeller } from '@prisma/client';
 
+import CreateCarDto from '../car/dto/createCar.dto';
 import { Period } from '../common/enum/views-period.enum';
 import { PrismaService } from '../common/orm/prisma.service';
+import { Currency } from '../common/type/currancy.type';
 
 @Injectable()
 export class SellerPremiumService {
@@ -63,6 +65,50 @@ export class SellerPremiumService {
     await this.prismaService.seller.update({
       where: { id: parseInt(sellerId) },
       data: { premiumSeller: undefined },
+    });
+  }
+
+  async createCarBySellerPremium(
+    idSeller: string,
+    carData: CreateCarDto,
+  ): Promise<Car> {
+    const sellerId = parseInt(idSeller);
+    if (isNaN(sellerId)) {
+      throw new Error(`Invalid Seller ID: ${idSeller}`);
+    }
+
+    const seller = await this.prismaService.seller.findUnique({
+      where: {
+        userId: sellerId,
+      },
+    });
+
+    if (!seller) {
+      throw new NotFoundException(`Seller with ID ${idSeller} not found`);
+    }
+
+    return await this.prismaService.car.create({
+      data: {
+        brand: carData.brand,
+        model: carData.model,
+        year: carData.year,
+        region: carData.region,
+        mileage: carData.mileage,
+        price: carData.price,
+        currency: carData.currency as Currency,
+        description: carData.description,
+        image: carData.image,
+        seller: {
+          connect: {
+            id: seller.id,
+          },
+        },
+        owner: {
+          connect: {
+            id: seller.id,
+          },
+        },
+      },
     });
   }
 

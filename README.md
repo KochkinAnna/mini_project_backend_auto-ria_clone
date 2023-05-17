@@ -82,8 +82,7 @@ The backend supports two types of user accounts: basic and premium. Premium acco
 ----
 ## Features in roles
 * __Admin:__ a superuser who can do everything. Only the customer and its partners will have this role.
-* __Buyer:__ "walks" on the platform, can contact an individual seller or car dealership
-* __Car:__ contains methods for creating, editing, and deleting cars.
+* __Buyer:__ "walks" on the platform, can contact an individual seller or car dealership.
 * __Cardealership:__ is responsible for creating, editing, and deleting car dealerships on the platform. In addition, you can also display a list of all available car dealerships and details of each of them.
 * __Cardealership-admin:__ managing the administrative tasks within the dealership, such as customer service, finance, and inventory management.
 * __Cardealership-manager:__ managing the sales team and ensuring sales targets are met. They are also responsible for building relationships with customers and ensuring customer satisfaction. 
@@ -117,8 +116,112 @@ The backend is integrated with AWS for cloud storage and other services. You can
 If you would like to contribute to the project, feel free to submit a pull request. Please follow the existing code style and enjoy :) 
 
 ----
+## Postman help
+To make a request in Postman, you can follow these steps:
+
+1. Open Postman and select the appropriate query method.
+2. Enter the URL, replacing :the appropriate parameter with the actual value.
+3. Customize any necessary headers or parameters for the request.
+4. Click the Send button (or press the Enter hotkey) to send the request.<p> Remember that you must have the server running on localhost:3000 to successfully connect and receive a response.</p>
+
+Here are the methods and URLs for the project respectively ({{api}} - http://localhost:3000):
+
+- Admin:
+
+| method |                              URL                               |                                      description |
+|--------|:--------------------------------------------------------------:|-------------------------------------------------:|
+| POST   |                         {{api}}/admin                          |                               Create a new admin |
+| PATCH  |                     {{api}}/admin/:idAdmin                     |                               Update a new admin |
+| GET    |                     {{api}}/admin/:idAdmin                     |                               Get an admin by ID |
+| GET    |                    {{api}}/admin/:firstName                    |                       Get an admin by first name |
+| GET    |                         {{api}}/admin                          |                             Get a list of admins |
+| DELETE |                     {{api}}/admin/:idAdmin                     |                                  Delete an admin |
+| POST   |                      {{api}}/admin/buyer                       |                      Create a new buyer by Admin |
+| PATCH  |                  {{api}}/admin/buyer/:idBuyer                  |                          Update a buyer by Admin |
+| GET    |                    {{api}}/admin/buyer/list                    |                    Get a list of buyers by Admin |
+| GET    |                  {{api}}/admin/buyer/:idBuyer                  |                       Get a buyer by ID by Admin |
+| GET    |              {{api}}/admin/buyer/name/:firstName               |               Get a buyer by first name by Admin |
+| DELETE |                 {{api}}/admin /buyer/:idBuyer                  |                          Delete a buyer by Admin |
+| POST   |                     {{api}}/admin/manager                      |                    Create a new manager by Admin |
+| PATCH  |                {{api}}/admin/manager/:idManager                |                        Update a manager by Admin |
+| GET    |                  {{api}}/admin/managers/list                   |                  Get a list of managers by Admin |
+| GET    |                {{api}}/admin/manager/:idManager                |                     Get a manager by ID by Admin |
+| GET    |             {{api}}/admin/manager/name/:firstName              |             Get a manager by first name by Admin |
+| DELETE |                {{api}}/admin/manager/:idManager                |                        Delete a manager by Admin |
+| POST   |                      {{api}}/admin/seller                      |                     Create a new seller by Admin |
+| PATCH  |                 {{api}}/admin/seller/:idSeller                 |                         Update a seller by Admin |
+| GET    |                   {{api}}/admin/sellers/list                   |                  Get a list of sellers  by Admin |
+| GET    |                 {{api}}/admin/seller/:idSeller                 |                      Get a seller by ID by Admin |
+| GET    |              {{api}}/admin/seller/name/:firstName              |              Get a seller by first name by Admin |
+| DELETE |                 {{api}}/admin/seller/:idSeller                 |                         Delete a seller by Admin |
+| POST   |             {{api}}/admin/sellerPremium/:sellerId              |               Upgrade seller to premium by Admin |
+| POST   |          {{api}}/admin/sellerPremium/:sellerId/cancel          |      Cancel seller premium subscription by Admin |
+| GET    |          {{api}}/admin/sellerPremium/:sellerId/views           | Get views count per period for a seller by Admin |
+| GET    |      {{api}}/admin/sellerPremium/:sellerId/views/:period       |                      Get a seller by ID by Admin |
+| GET    |   {{api}}/admin/sellerPremium/:sellerId/averagePrice/region    |      Get average price in seller region by Admin |
+| GET    |   {{api}}/admin/sellerPremium/:sellerId/averagePrice/ukraine   |            Get average price in Ukraine by Admin |
+| POST   |                {{api}}/admin/new/:idSeller/car                 |                        Create a new car by Admin |
+| PATCH  |        {{api}}/admin/update/seller/:idSeller/car/:idCar        |                            Update a car by Admin |
+| GET    |                     {{api}}/admin/cars/all                     |                            Get all cars by Admin |
+| GET    |               {{api}}/admin/seller/:idSeller/car               |                     Get all seller cars by Admin |
+| GET    |           {{api}}/admin/seller/:idSeller/car/:idCar            |                               Get a car by Admin |
+| DELETE |            {{api}}/admin/seller/:idSeller/car/:idCa            |                            Delete a car by Admin |
+
+- Buyer:
+
+| method |           URL            |               description |
+|--------|:------------------------:|--------------------------:|
+| POST   |      {{api}}/buyer       |        Create a new buyer |
+| PATCH  |  {{api}}/buyer/:idBuyer  |            Update a buyer |
+| GET    |  {{api}}/buyer/:idBuyer  |         Get a buyer by ID |
+| GET    | {{api}}/buyer/:firstName | Get a buyer by first name |
+| GET    |      {{api}}/buyer       |      Get a list of buyers |
+| DELETE | {{api}}/buyer/:idBuyer   |            Delete a buyer |
+
+- Manager:
+
+| method |            URL             |                 description |
+|--------|:--------------------------:|----------------------------:|
+| POST   |      {{api}}/manager       |        Create a new manager |
+| PATCH  | {{api}}/manager/:idManager |            Update a manager |
+| GET    | {{api}}/manager/:idManager |         Get a manager by ID |
+| GET    | {{api}}/manager/:firstName | Get a manager by first name |
+| GET    |      {{api}}/manager       |      Get a list of managers |
+| DELETE | {{api}}/manager/:idManager |            Delete a manager |
+
+- Seller:
+
+| method |                 URL                 |                description |
+|--------|:-----------------------------------:|---------------------------:|
+| POST   |           {{api}}/seller            |        Create a new seller |
+| PATCH  |      {{api}}/seller/:idSeller       |            Update a seller |
+| GET    |      {{api}}/seller/:idSeller       |         Get a seller by ID |
+| GET    |      {{api}}/seller/:firstName      | Get a seller by first name |
+| GET    |        {{api}}/sellerPremium        |      Get a list of sallers |
+| DELETE |      {{api}}/seller/:idSeller       |            Delete a seller |
+| POST   |    {{api}}/seller/:idSeller/car     | Create a new car by seller |
+| PATCH  | {{api}}/seller/:idSeller/car/:idCar |     Update a car by seller |
+| GET    |    {{api}}/seller/:idSeller/car     |      Get all car by seller |
+| GET    | {{api}}/seller/:idSeller/car/:idCar |        Get a car by seller |
+| DELETE |      {{api}}/seller/:idSeller/car   |     Delete a car by seller |
+
+- Seller Premium:
+
+| method |                          URL                          |                             description |
+|--------|:-----------------------------------------------------:|----------------------------------------:|
+| POST   |            {{api}}/sellerPremium/:sellerId            |               Upgrade seller to premium |
+| POST   |        {{api}}/sellerPremium/:sellerId/cancel         |      Cancel seller premium subscription |
+| POST   |      {{api}}/sellerPremium/another/:idSeller/car      |      Create a new car by seller premium |
+| GET    |         {{api}}/sellerPremium/:sellerId/views         |            Get views count for a seller |
+| GET    |     {{api}}/sellerPremium/:sellerId/views/:period     | Get views count per period for a seller |
+| GET    | {{api}}/sellerPremium/:sellerId/averagePrice/region   |      Get average price in seller region |
+| GET    | {{api}}/sellerPremium/:sellerId/averagePrice/ukraine  |            Get average price in Ukraine |
+
+When the car dealership code will be implemented, you can add information here.
+
+----
 ## Future Improvements
-* Develop access to the platform not only for individual sellers, but also for __car dealerships__ with their __managers__, __administrators__, __salespeople__, __mechanics__ (through a system of permissions)
+* Develop access to the platform not only for individual sellers, but also for __car dealerships__ with their __managers__, __administrators__, __salespeople__, __service-managers__, __mechanics__ (through a system of permissions)
 * Implement a payment system to allow users to purchase cars online.
 * Implement a messaging system to allow buyers and sellers to communicate directly through the platform.
 * Improve the search functionality to make it more robust and user-friendly.

@@ -103,7 +103,7 @@ export class SellerController {
       .json(await this.sellerService.getSellerById(idSeller));
   }
 
-  @ApiOperation({ summary: 'Get a manager by first name' })
+  @ApiOperation({ summary: 'Get a seller by first name' })
   @ApiParam({ name: 'firstName', required: true })
   @Get('/:firstName')
   async getSellerByFirstName(
