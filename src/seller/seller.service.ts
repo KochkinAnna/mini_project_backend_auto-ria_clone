@@ -130,10 +130,7 @@ export class SellerService {
     });
   }
 
-  async createCar(
-    idSeller: string,
-    carData: CreateCarDto,
-  ): Promise<Car> {
+  async createCar(idSeller: string, carData: CreateCarDto): Promise<Car> {
     const sellerId = parseInt(idSeller);
     if (isNaN(sellerId)) {
       throw new Error(`Invalid Seller ID: ${idSeller}`);

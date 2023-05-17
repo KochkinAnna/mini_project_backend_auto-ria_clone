@@ -1,10 +1,10 @@
 import { forwardRef, Module } from '@nestjs/common';
 
+import { AdminModule } from '../admin/admin.module';
 import { PrismaModule } from '../common/orm/prisma.module';
 import { PrismaService } from '../common/orm/prisma.service';
 import { SellerController } from './seller.controller';
 import { SellerService } from './seller.service';
-import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [forwardRef(() => AdminModule), PrismaModule],
