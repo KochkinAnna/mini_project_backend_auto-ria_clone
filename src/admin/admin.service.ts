@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Admin } from '@prisma/client';
+import { Admin, Car } from '@prisma/client';
 
 import { PrismaService } from '../common/orm/prisma.service';
 import { CreateAdminDto } from './dto/createAdmin.dto';
@@ -87,6 +87,10 @@ export class AdminService {
         },
       },
     });
+  }
+
+  async getCars(): Promise<Car[]> {
+    return this.prismaService.car.findMany({});
   }
 
   async getAdminById(idAdmin: string): Promise<Admin> {

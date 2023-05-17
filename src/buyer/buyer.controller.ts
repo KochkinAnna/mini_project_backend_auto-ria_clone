@@ -63,6 +63,7 @@ export class BuyerController {
       .json(await this.buyerService.createBuyer(buyerData));
   }
 
+  @ApiOperation({ summary: 'Update a buyer' })
   @ApiParam({ name: 'idBuyer', required: true })
   @Patch('/:idBuyer')
   @UseInterceptors(
@@ -85,6 +86,7 @@ export class BuyerController {
     return this.buyerService.updateBuyer(idBuyer, buyerData);
   }
 
+  @ApiOperation({ summary: 'Get a buyer by ID' })
   @ApiParam({ name: 'idBuyer', type: 'string', description: 'Buyer ID' })
   @Get('/:idBuyer')
   async getBuyerById(
@@ -97,6 +99,7 @@ export class BuyerController {
       .json(await this.buyerService.getBuyerById(idBuyer));
   }
 
+  @ApiOperation({ summary: 'Get a buyer by first name' })
   @ApiParam({ name: 'firstName', required: true })
   @Get('/:firstName')
   async getBuyerByFirstName(
@@ -119,6 +122,7 @@ export class BuyerController {
     }
   }
 
+  @ApiOperation({ summary: 'Get a list of buyers' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get()
   async getBuyerList(@Req() reg: any, @Res() res: any): Promise<Buyer[]> {
@@ -127,6 +131,7 @@ export class BuyerController {
       .json(await this.buyerService.getBuyerList());
   }
 
+  @ApiOperation({ summary: 'Delete a buyer' })
   @ApiParam({ name: 'idBuyer', required: true })
   @Delete('/:idBuyer')
   async deleteBuyer(

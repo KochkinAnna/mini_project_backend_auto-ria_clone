@@ -67,6 +67,7 @@ export class SellerController {
       .json(await this.sellerService.createSeller(sellerData));
   }
 
+  @ApiOperation({ summary: 'Update a seller' })
   @ApiParam({ name: 'idSeller', required: true })
   @Patch('/:idSeller')
   @UseInterceptors(
@@ -89,6 +90,7 @@ export class SellerController {
     return this.sellerService.updateSeller(idSeller, sellerData);
   }
 
+  @ApiOperation({ summary: 'Get a seller by ID' })
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/:idSeller')
   async getSellerById(
@@ -101,6 +103,7 @@ export class SellerController {
       .json(await this.sellerService.getSellerById(idSeller));
   }
 
+  @ApiOperation({ summary: 'Get a manager by first name' })
   @ApiParam({ name: 'firstName', required: true })
   @Get('/:firstName')
   async getSellerByFirstName(
@@ -123,6 +126,7 @@ export class SellerController {
     }
   }
 
+  @ApiOperation({ summary: 'Get a list of sallers' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get()
   async getSellerList(@Req() reg: any, @Res() res: any): Promise<Seller[]> {
@@ -131,6 +135,7 @@ export class SellerController {
       .json(await this.sellerService.getSellerList());
   }
 
+  @ApiOperation({ summary: 'Delete a seller' })
   @ApiParam({ name: 'idSeller', required: true })
   @Delete('/:idSeller')
   async deleteSeller(
@@ -153,7 +158,7 @@ export class SellerController {
       fileFilter: imageFileFilter,
     }),
   )
-  async createCarBySeller(
+  async createCar(
     @Req() req: any,
     @Param('idSeller') idSeller: string,
     @Body() carData: CreateCarDto,
@@ -165,9 +170,10 @@ export class SellerController {
     }
     return res
       .status(HttpStatus.CREATED)
-      .json(await this.sellerService.createCarBySeller(idSeller, carData));
+      .json(await this.sellerService.createCar(idSeller, carData));
   }
 
+  @ApiOperation({ summary: 'Update a car by seller' })
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Patch('/:idSeller/car/:idCar')
   @UseInterceptors(
@@ -179,7 +185,7 @@ export class SellerController {
       fileFilter: imageFileFilter,
     }),
   )
-  async updateCarBySeller(
+  async updateCar(
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,
     @Body() carData: UpdateCarDto,
@@ -188,24 +194,26 @@ export class SellerController {
     if (file) {
       carData.image = `public/${file.filename}`;
     }
-    return this.sellerService.updateCarBySeller(idSeller, idCar, carData);
+    return this.sellerService.updateCar(idSeller, idCar, carData);
   }
 
+  @ApiOperation({ summary: 'Get all car by seller' })
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/:idSeller/car')
-  async getCarsForSeller(
+  async getCars(
     @Req() req: any,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
   ): Promise<Car[]> {
     return res
       .status(HttpStatus.OK)
-      .json(await this.sellerService.getCarsBySeller(idSeller));
+      .json(await this.sellerService.getCars(idSeller));
   }
 
+  @ApiOperation({ summary: 'Get a car by seller' })
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/:idSeller/car/:idCar')
-  async getCarForSeller(
+  async getCar(
     @Req() req: any,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
@@ -213,18 +221,19 @@ export class SellerController {
   ): Promise<Car> {
     return res
       .status(HttpStatus.OK)
-      .json(await this.sellerService.getCarBySeller(idSeller, idCar));
+      .json(await this.sellerService.getCar(idSeller, idCar));
   }
 
+  @ApiOperation({ summary: 'Delete a car by seller' })
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @ApiParam({ name: 'idCar', type: 'string', description: 'Car ID' })
   @Delete('/:idSeller/car/:idCar')
-  async deleteCarBySeller(
+  async deleteCar(
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,
     @Res() res: any,
   ): Promise<void> {
-    await this.sellerService.deleteCarBySeller(idSeller, idCar);
+    await this.sellerService.deleteCar(idSeller, idCar);
     res.sendStatus(HttpStatus.OK);
   }
 }

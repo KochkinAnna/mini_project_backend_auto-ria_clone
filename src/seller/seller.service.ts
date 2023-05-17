@@ -130,7 +130,7 @@ export class SellerService {
     });
   }
 
-  async createCarBySeller(
+  async createCar(
     idSeller: string,
     carData: CreateCarDto,
   ): Promise<Car> {
@@ -185,7 +185,7 @@ export class SellerService {
     return car;
   }
 
-  async updateCarBySeller(
+  async updateCar(
     idSeller: string,
     idCar: string,
     carData: UpdateCarDto,
@@ -214,7 +214,6 @@ export class SellerService {
     return this.prismaService.car.update({
       where: {
         id: carId,
-        sellerId: sellerId,
       },
       data: {
         brand: carData.brand,
@@ -240,7 +239,7 @@ export class SellerService {
     });
   }
 
-  async getCarsBySeller(idSeller: string): Promise<Car[]> {
+  async getCars(idSeller: string): Promise<Car[]> {
     const sellerId = parseInt(idSeller);
     if (isNaN(sellerId)) {
       throw new Error(`Invalid Seller ID: ${idSeller}`);
@@ -263,7 +262,7 @@ export class SellerService {
     });
   }
 
-  async getCarBySeller(idSeller: string, idCar: string): Promise<Car> {
+  async getCar(idSeller: string, idCar: string): Promise<Car> {
     const sellerId = parseInt(idSeller);
     const carId = parseInt(idCar);
 
@@ -293,7 +292,7 @@ export class SellerService {
     });
   }
 
-  async deleteCarBySeller(idSeller: string, idCar: string): Promise<void> {
+  async deleteCar(idSeller: string, idCar: string): Promise<void> {
     const sellerId = parseInt(idSeller);
     const carId = parseInt(idCar);
 
@@ -318,7 +317,6 @@ export class SellerService {
     await this.prismaService.car.delete({
       where: {
         id: carId,
-        sellerId: sellerId,
       },
     });
   }

@@ -63,6 +63,7 @@ export class ManagerController {
       .json(await this.managerService.createManager(managerData));
   }
 
+  @ApiOperation({ summary: 'Update a manager' })
   @ApiParam({ name: 'idManager', required: true })
   @Patch('/:idManager')
   @UseInterceptors(
@@ -85,6 +86,7 @@ export class ManagerController {
     return this.managerService.updateManager(idManager, managerData);
   }
 
+  @ApiOperation({ summary: 'Get a manager by ID' })
   @ApiParam({ name: 'idmManager', type: 'string', description: 'Manager ID' })
   @Get('/:idManager')
   async getManagerById(
@@ -97,6 +99,7 @@ export class ManagerController {
       .json(await this.managerService.getManagerById(idManager));
   }
 
+  @ApiOperation({ summary: 'Get a manager by first name' })
   @ApiParam({ name: 'firstName', required: true })
   @Get('/:firstName')
   async getManagerByFirstName(
@@ -119,6 +122,7 @@ export class ManagerController {
     }
   }
 
+  @ApiOperation({ summary: 'Get a list of managers' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get()
   async getManagerList(@Req() reg: any, @Res() res: any): Promise<Manager[]> {
@@ -127,6 +131,7 @@ export class ManagerController {
       .json(await this.managerService.getManagerList());
   }
 
+  @ApiOperation({ summary: 'Delete a manager' })
   @ApiParam({ name: 'idManager', required: true })
   @Delete('/:idManager')
   async deleteManager(
