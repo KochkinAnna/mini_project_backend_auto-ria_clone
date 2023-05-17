@@ -15,7 +15,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
@@ -543,9 +543,9 @@ export class AdminController {
   @ApiCreatedResponse({ type: CreateCarDto })
   @Post('/new/:idSeller/car')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
       storage: diskStorage({
-        destination: './public',
+        destination: './public/cars',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -556,10 +556,10 @@ export class AdminController {
     @Param('idSeller') idSeller: string,
     @Body() carData: CreateCarDto,
     @Res() res: any,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() files: { image?: Express.Multer.File[] },
   ): Promise<CreateCarDto> {
-    if (file) {
-      carData.image = `public/${file.filename}`;
+    if (files?.image) {
+      carData.image = `/public/cars/${files.image[0].filename}`;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -570,9 +570,9 @@ export class AdminController {
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Patch('/update/seller/:idSeller/car/:idCar')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
       storage: diskStorage({
-        destination: './public',
+        destination: './public/cars',
         filename: editFileName,
       }),
       fileFilter: imageFileFilter,
@@ -582,10 +582,10 @@ export class AdminController {
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,
     @Body() carData: UpdateCarDto,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<Car> {
-    if (file) {
-      carData.image = `public/${file.filename}`;
+    @UploadedFile() files: { image?: Express.Multer.File[] },
+  ): Promise<CreateCarDto> {
+    if (files?.image) {
+      carData.image = `/public/cars/${files.image[0].filename}`;
     }
     return this.sellerService.updateCar(idSeller, idCar, carData);
   }
