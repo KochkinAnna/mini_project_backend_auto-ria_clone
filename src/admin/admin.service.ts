@@ -166,4 +166,15 @@ export class AdminService {
       },
     });
   }
+
+  async findAdminByEmail(adminEmail: string, include: any) {
+    return this.prismaService.admin.findFirst({
+      where: {
+        user: {
+          email: adminEmail,
+        },
+      },
+      include,
+    });
+  }
 }
