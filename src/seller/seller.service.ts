@@ -5,20 +5,25 @@ import CreateCarDto from '../car/dto/createCar.dto';
 import UpdateCarDto from '../car/dto/updateCar.dto';
 import { PrismaService } from '../common/orm/prisma.service';
 import { Currency } from '../common/type/currancy.type';
+import { PasswordService } from '../password/password.service';
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
 
 @Injectable()
 export class SellerService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly passwordService: PasswordService,
+  ) {}
 
   async createSeller(sellerData: CreateSellerDto): Promise<Seller> {
+    const passwordHash = await this.passwordService.hashPass(sellerData.password);
     return this.prismaService.seller.create({
       data: {
         user: {
           create: {
             email: sellerData.email,
-            password: sellerData.password,
+            password: passwordHash,
             firstName: sellerData.firstName,
             lastName: sellerData.lastName,
             avatar: sellerData.avatar,

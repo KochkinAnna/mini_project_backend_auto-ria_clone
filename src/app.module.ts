@@ -35,12 +35,15 @@ import { PrismaService } from './common/orm/prisma.service';
 import { ManagerController } from './manager/manager.controller';
 import { ManagerModule } from './manager/manager.module';
 import { ManagerService } from './manager/manager.service';
+import { PasswordModule } from './password/password.module';
+import { PasswordService } from './password/password.service';
 import { SellerController } from './seller/seller.controller';
 import { SellerModule } from './seller/seller.module';
 import { SellerService } from './seller/seller.service';
 import { SellerPremiumController } from './seller-premium/seller-premium.controller';
 import { SellerPremiumModule } from './seller-premium/seller-premium.module';
 import { SellerPremiumService } from './seller-premium/seller-premium.service';
+import { PasswordController } from './password/password.controller';
 
 @Module({
   imports: [
@@ -54,9 +57,11 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     CardealershipSalesModule,
     CardealershipServiceManagerModule,
     ManagerModule,
+    PasswordModule,
     PrismaModule,
     SellerModule,
     SellerPremiumModule,
+    PasswordModule,
   ],
   controllers: [
     AppController,
@@ -70,6 +75,7 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     CardealershipMechanicController,
     CardealershipServiceManagerController,
     ManagerController,
+    PasswordController,
     SellerController,
     SellerPremiumController,
   ],
@@ -86,9 +92,11 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     CardealershipSalesService,
     MailService,
     ManagerService,
+    PasswordService,
     PrismaService,
     SellerService,
     SellerPremiumService,
+    PasswordService,
   ],
 })
 export class AppModule {}

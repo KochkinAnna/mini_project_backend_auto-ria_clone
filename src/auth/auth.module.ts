@@ -8,6 +8,7 @@ import { BuyerModule } from '../buyer/buyer.module';
 import { CommonModule } from '../common/common.module';
 import { MailService } from '../common/mail/mail.service';
 import { ManagerModule } from '../manager/manager.module';
+import { PasswordService } from '../password/password.service';
 import { SellerModule } from '../seller/seller.module';
 import { AuthService } from './auth.service';
 import { BearerStrategy } from './bearer.strategy';
@@ -29,7 +30,7 @@ import { BearerStrategy } from './bearer.strategy';
     forwardRef(() => SellerModule),
     forwardRef(() => ManagerModule),
   ],
-  providers: [AuthService, BearerStrategy, AdminService, MailService],
+  providers: [AuthService, BearerStrategy, MailService],
   exports: [AuthService],
 })
 export class AuthModule {}

@@ -2,20 +2,27 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Admin, Car } from '@prisma/client';
 
 import { PrismaService } from '../common/orm/prisma.service';
+import { PasswordService } from '../password/password.service';
 import { CreateAdminDto } from './dto/createAdmin.dto';
 import { UpdateAdminDto } from './dto/updateAdmin.dto';
 
 @Injectable()
 export class AdminService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly passwordService: PasswordService,
+  ) {}
 
   async createAdmin(adminData: CreateAdminDto): Promise<Admin> {
+    const passwordHash = await this.passwordService.hashPass(
+      adminData.password,
+    );
     return this.prismaService.admin.create({
       data: {
         user: {
           create: {
             email: adminData.email,
-            password: adminData.password,
+            password: passwordHash,
             firstName: adminData.firstName,
             lastName: adminData.lastName,
             avatar: adminData.avatar,
@@ -167,14 +174,14 @@ export class AdminService {
     });
   }
 
-  async findAdminByEmail(adminEmail: string, include: any) {
+  async findAdminByEmail(adminEmail: string) {
     return this.prismaService.admin.findFirst({
       where: {
         user: {
           email: adminEmail,
         },
       },
-      include,
+      include: { user: true },
     });
   }
 }

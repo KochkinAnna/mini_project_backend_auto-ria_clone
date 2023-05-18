@@ -6,6 +6,8 @@ import { PrismaModule } from '../common/orm/prisma.module';
 import { PrismaService } from '../common/orm/prisma.service';
 import { ManagerModule } from '../manager/manager.module';
 import { ManagerService } from '../manager/manager.service';
+import { PasswordModule } from '../password/password.module';
+import { PasswordService } from '../password/password.service';
 import { SellerModule } from '../seller/seller.module';
 import { SellerService } from '../seller/seller.service';
 import { SellerPremiumModule } from '../seller-premium/seller-premium.module';
@@ -20,6 +22,7 @@ import { AdminService } from './admin.service';
     forwardRef(() => ManagerModule),
     forwardRef(() => SellerModule),
     forwardRef(() => SellerPremiumModule),
+    forwardRef(() => PasswordModule),
   ],
   controllers: [AdminController],
   providers: [
@@ -27,8 +30,10 @@ import { AdminService } from './admin.service';
     PrismaService,
     BuyerService,
     ManagerService,
+    PasswordService,
     SellerService,
     SellerPremiumService,
   ],
+  exports: [AdminService],
 })
 export class AdminModule {}

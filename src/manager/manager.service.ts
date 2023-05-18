@@ -3,20 +3,25 @@ import { Manager } from '@prisma/client';
 
 import { UserRole } from '../common/enum/user-role.enum';
 import { PrismaService } from '../common/orm/prisma.service';
+import { PasswordService } from '../password/password.service';
 import { CreateManagerDto } from './dto/createManager.dto';
 import { UpdateManagerDto } from './dto/updateManager.dto';
 
 @Injectable()
 export class ManagerService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly passwordService: PasswordService,
+  ) {}
 
   async createManager(managerData: CreateManagerDto): Promise<Manager> {
+    const passwordHash = await this.passwordService.hashPass(managerData.password);
     return this.prismaService.manager.create({
       data: {
         user: {
           create: {
             email: managerData.email,
-            password: managerData.password,
+            password: passwordHash,
             firstName: managerData.firstName,
             lastName: managerData.lastName,
             avatar: managerData.avatar,

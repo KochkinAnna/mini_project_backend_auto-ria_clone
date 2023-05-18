@@ -2,20 +2,25 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Buyer } from '@prisma/client';
 
 import { PrismaService } from '../common/orm/prisma.service';
+import { PasswordService } from '../password/password.service';
 import { CreateBuyerDto } from './dto/createBuyer.dto';
 import { UpdateBuyerDto } from './dto/updateBuyer.dto';
 
 @Injectable()
 export class BuyerService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly passwordService: PasswordService,
+  ) {}
 
   async createBuyer(buyerData: CreateBuyerDto): Promise<Buyer> {
+    const passwordHash = await this.passwordService.hashPass(buyerData.password);
     return this.prismaService.buyer.create({
       data: {
         user: {
           create: {
             email: buyerData.email,
-            password: buyerData.password,
+            password: passwordHash,
             firstName: buyerData.firstName,
             lastName: buyerData.lastName,
             avatar: buyerData.avatar,

@@ -1,18 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Admin, Buyer, Manager, Seller, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { AdminService } from '../admin/admin.service';
 import { BuyerService } from '../buyer/buyer.service';
 import { UserRole } from '../common/enum/user-role.enum';
+import { UserWithUserProperty } from '../common/interface/UserWithUserProperty';
 import { ManagerService } from '../manager/manager.service';
 import { SellerService } from '../seller/seller.service';
 import { RegisterDto } from './dto/auth.dto';
-
-interface UserWithUserProperty extends Admin, Manager, Buyer, Seller {
-  user: User & { id: number };
-}
 
 @Injectable()
 export class AuthService {
@@ -24,16 +20,14 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async compareHash(password: string, hash: string) {
+  async compareHash(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
 
   async login(email: string, password: string) {
     let user: UserWithUserProperty | undefined;
 
-    const adminUser = await this.adminService.findAdminByEmail(email, {
-      include: { user: true },
-    });
+    const adminUser = await this.adminService.findAdminByEmail(email);
     if (adminUser && adminUser.user) {
       user = adminUser as unknown as UserWithUserProperty;
     }
@@ -81,8 +75,9 @@ export class AuthService {
         return this.generateToken(user.user.id);
       }
     }
-  }
 
+    return null;
+  }
   async register(dto: RegisterDto) {
     let user;
     if (dto.role === UserRole.ADMIN) {
@@ -137,9 +132,7 @@ export class AuthService {
   ): Promise<UserWithUserProperty | undefined> {
     let user: UserWithUserProperty | undefined;
 
-    const adminUser = await this.adminService.findAdminByEmail(email, {
-      include: { user: true },
-    });
+    const adminUser = await this.adminService.findAdminByEmail(email);
     if (adminUser && adminUser.user) {
       user = adminUser as unknown as UserWithUserProperty;
     }
@@ -180,5 +173,13 @@ export class AuthService {
 
   async signIn(userId: any): Promise<any> {
     return this.generateToken(userId);
+  }
+
+  async validateToken(token: string): Promise<number> {
+    const payload: any = this.jwtService.decode(token);
+    if (!payload || !payload.id) {
+      throw new UnauthorizedException();
+    }
+    return payload.id;
   }
 }
