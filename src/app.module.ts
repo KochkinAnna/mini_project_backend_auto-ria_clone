@@ -35,6 +35,7 @@ import { PrismaService } from './common/orm/prisma.service';
 import { ManagerController } from './manager/manager.controller';
 import { ManagerModule } from './manager/manager.module';
 import { ManagerService } from './manager/manager.service';
+import { PasswordController } from './password/password.controller';
 import { PasswordModule } from './password/password.module';
 import { PasswordService } from './password/password.service';
 import { SellerController } from './seller/seller.controller';
@@ -43,7 +44,6 @@ import { SellerService } from './seller/seller.service';
 import { SellerPremiumController } from './seller-premium/seller-premium.controller';
 import { SellerPremiumModule } from './seller-premium/seller-premium.module';
 import { SellerPremiumService } from './seller-premium/seller-premium.service';
-import { PasswordController } from './password/password.controller';
 
 @Module({
   imports: [

@@ -1,12 +1,20 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, Matches, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
 
-import { UserRole } from '../../common/enum/user-role.enum';
-import { PASSWORD_REGEX } from '../../common/regex/password.regex';
-import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
 import { NoProfanity } from '../../common/decorator/noProfanity.decorator';
-import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
+import { UserRole } from '../../common/enum/user-role.enum';
 import { COMPANY_REGEX } from '../../common/regex/company.regex';
+import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
+import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
+import { PASSWORD_REGEX } from '../../common/regex/password.regex';
 
 export class LoginDto {
   @ApiProperty({ required: true, example: 'user@gmain.com' })

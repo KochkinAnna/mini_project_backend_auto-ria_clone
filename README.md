@@ -167,6 +167,13 @@ Here are the methods and URLs for the project respectively ({{api}} - http://loc
 | GET    |           {{api}}/admin/seller/:idSeller/car/:idCar            |                               Get a car by Admin |
 | DELETE |            {{api}}/admin/seller/:idSeller/car/:idCa            |                            Delete a car by Admin |
 
+- Auth:
+
+| method |          URL          |   description |
+|--------|:---------------------:|--------------:|
+| POST   |  {{api}}/auth/login   |    Login user |
+| POST   | {{api}}/auth/register | Register user |
+
 - Buyer:
 
 | method |           URL            |               description |

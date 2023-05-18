@@ -17,7 +17,9 @@ export class SellerService {
   ) {}
 
   async createSeller(sellerData: CreateSellerDto): Promise<Seller> {
-    const passwordHash = await this.passwordService.hashPass(sellerData.password);
+    const passwordHash = await this.passwordService.hashPass(
+      sellerData.password,
+    );
     return this.prismaService.seller.create({
       data: {
         user: {

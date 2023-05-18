@@ -15,7 +15,9 @@ export class ManagerService {
   ) {}
 
   async createManager(managerData: CreateManagerDto): Promise<Manager> {
-    const passwordHash = await this.passwordService.hashPass(managerData.password);
+    const passwordHash = await this.passwordService.hashPass(
+      managerData.password,
+    );
     return this.prismaService.manager.create({
       data: {
         user: {

@@ -14,7 +14,9 @@ export class BuyerService {
   ) {}
 
   async createBuyer(buyerData: CreateBuyerDto): Promise<Buyer> {
-    const passwordHash = await this.passwordService.hashPass(buyerData.password);
+    const passwordHash = await this.passwordService.hashPass(
+      buyerData.password,
+    );
     return this.prismaService.buyer.create({
       data: {
         user: {

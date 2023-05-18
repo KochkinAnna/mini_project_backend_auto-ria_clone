@@ -119,7 +119,7 @@ export class AuthService {
       });
     }
 
-    return user;
+    return this.signIn(user.id.toString());
   }
 
   async findUserByEmail(

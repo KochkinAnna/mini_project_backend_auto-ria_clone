@@ -40,34 +40,36 @@ export class AuthController {
   @ApiOkResponse({ type: RegisterDto })
   @Post('register')
   async registerUser(@Res() res: any, @Body() body: RegisterDto) {
-    let existingUser;
-
     try {
-      existingUser = await this.authService.findUserByEmail(body.email.trim());
+      const existingUser = await this.authService.findUserByEmail(
+        body.email.trim(),
+      );
+      if (existingUser) {
+        return res
+          .status(HttpStatus.FORBIDDEN)
+          .json({ message: 'User with this email already exists' });
+      }
+
+      const user = await this.authService.register(body);
+
+      if (!user) {
+        return res
+          .status(HttpStatus.BAD_REQUEST)
+          .json({ message: 'Error.Register_user_failed' });
+      }
+
+      const subject = 'Welcome on board!';
+      this.mailService.send(user.email, subject, MailTemplate.WELCOME, {
+        userName: user.firstName,
+      });
+
+      const token = await this.authService.signIn(user.id.toString());
+      return res.status(HttpStatus.OK).json({ token });
     } catch (err) {
       console.log(err);
-    }
-
-    if (existingUser) {
       return res
-        .status(HttpStatus.FORBIDDEN)
-        .json({ message: 'User with this email already exists' });
-    }
-
-    const user = await this.authService.register(body);
-
-    if (!user) {
-      return res
-        .status(HttpStatus.BAD_REQUEST)
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .json({ message: 'Error.Register_user_failed' });
     }
-
-    const subject = 'Welcome on board!';
-    this.mailService.send(user.email, subject, MailTemplate.WELCOME, {
-      userName: user.firstName,
-    });
-
-    const token = await this.authService.signIn(user.id.toString());
-    return res.status(HttpStatus.OK).json({ token });
   }
 }
