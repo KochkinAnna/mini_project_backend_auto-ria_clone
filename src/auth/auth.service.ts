@@ -6,7 +6,6 @@ import * as bcrypt from 'bcrypt';
 import { AdminService } from '../admin/admin.service';
 import { BuyerService } from '../buyer/buyer.service';
 import { UserRole } from '../common/enum/user-role.enum';
-import { MailService } from '../common/mail/mail.service';
 import { ManagerService } from '../manager/manager.service';
 import { SellerService } from '../seller/seller.service';
 import { RegisterDto } from './dto/auth.dto';
@@ -76,12 +75,10 @@ export class AuthService {
             return null;
           }
 
-          const token = this.generateToken(user.user.id);
-          return token;
+          return this.generateToken(user.user.id);
         }
 
-        const token = this.generateToken(user.user.id);
-        return token;
+        return this.generateToken(user.user.id);
       }
     }
   }

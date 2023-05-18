@@ -7,9 +7,10 @@ import { AdminService } from '../admin/admin.service';
 import { BuyerModule } from '../buyer/buyer.module';
 import { CommonModule } from '../common/common.module';
 import { MailService } from '../common/mail/mail.service';
+import { ManagerModule } from '../manager/manager.module';
+import { SellerModule } from '../seller/seller.module';
 import { AuthService } from './auth.service';
 import { BearerStrategy } from './bearer.strategy';
-import { SellerModule } from '../seller/seller.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SellerModule } from '../seller/seller.module';
     forwardRef(() => AdminModule),
     forwardRef(() => BuyerModule),
     forwardRef(() => SellerModule),
+    forwardRef(() => ManagerModule),
   ],
   providers: [AuthService, BearerStrategy, AdminService, MailService],
   exports: [AuthService],
