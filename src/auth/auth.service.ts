@@ -33,25 +33,19 @@ export class AuthService {
     }
 
     if (!user || !user.user) {
-      const managerUser = await this.managerService.findManagerByEmail(email, {
-        include: { user: true },
-      });
+      const managerUser = await this.managerService.findManagerByEmail(email);
       if (managerUser && managerUser.user) {
         user = managerUser as unknown as UserWithUserProperty;
       }
 
       if (!user || !user.user) {
-        const buyerUser = await this.buyerService.findBuyerByEmail(email, {
-          include: { user: true },
-        });
+        const buyerUser = await this.buyerService.findBuyerByEmail(email);
         if (buyerUser && buyerUser.user) {
           user = buyerUser as unknown as UserWithUserProperty;
         }
 
         if (!user || !user.user) {
-          const sellerUser = await this.sellerService.findSellerByEmail(email, {
-            include: { user: true },
-          });
+          const sellerUser = await this.sellerService.findSellerByEmail(email);
           if (sellerUser && sellerUser.user) {
             user = sellerUser as unknown as UserWithUserProperty;
           }
@@ -78,6 +72,7 @@ export class AuthService {
 
     return null;
   }
+
   async register(dto: RegisterDto) {
     let user;
     if (dto.role === UserRole.ADMIN) {
@@ -138,27 +133,21 @@ export class AuthService {
     }
 
     if (!user || !user.user) {
-      const managerUser = await this.managerService.findManagerByEmail(email, {
-        include: { user: true },
-      });
+      const managerUser = await this.managerService.findManagerByEmail(email);
       if (managerUser && managerUser.user) {
         user = managerUser as unknown as UserWithUserProperty;
       }
     }
 
     if (!user || !user.user) {
-      const buyerUser = await this.buyerService.findBuyerByEmail(email, {
-        include: { user: true },
-      });
+      const buyerUser = await this.buyerService.findBuyerByEmail(email);
       if (buyerUser && buyerUser.user) {
         user = buyerUser as unknown as UserWithUserProperty;
       }
     }
 
     if (!user || !user.user) {
-      const sellerUser = await this.sellerService.findSellerByEmail(email, {
-        include: { user: true },
-      });
+      const sellerUser = await this.sellerService.findSellerByEmail(email);
       if (sellerUser && sellerUser.user) {
         user = sellerUser as unknown as UserWithUserProperty;
       }

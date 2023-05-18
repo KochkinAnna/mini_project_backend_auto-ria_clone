@@ -323,14 +323,14 @@ export class SellerService {
     });
   }
 
-  async findSellerByEmail(sellerEmail: string, include: any) {
+  async findSellerByEmail(sellerEmail: string) {
     return this.prismaService.seller.findFirst({
       where: {
         user: {
           email: sellerEmail,
         },
       },
-      include,
+      include: { user: true },
     });
   }
 }

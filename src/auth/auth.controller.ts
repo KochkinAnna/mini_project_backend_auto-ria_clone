@@ -1,5 +1,5 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { MailTemplate } from '../common/mail/mail.interface';
 import { MailService } from '../common/mail/mail.service';
@@ -14,6 +14,8 @@ export class AuthController {
     private mailService: MailService,
   ) {}
 
+  @ApiOperation({ summary: 'Login user' })
+  @ApiOkResponse({ type: LoginDto })
   @Post('login')
   async login(@Res() res: any, @Body() body: LoginDto) {
     if (!body.email || !body.password) {
@@ -34,6 +36,8 @@ export class AuthController {
     return res.status(HttpStatus.OK).json({ token });
   }
 
+  @ApiOperation({ summary: 'Register user' })
+  @ApiOkResponse({ type: RegisterDto })
   @Post('register')
   async registerUser(@Res() res: any, @Body() body: RegisterDto) {
     let existingUser;
