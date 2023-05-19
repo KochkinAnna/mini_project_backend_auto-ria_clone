@@ -9,27 +9,29 @@ import { configs } from '../common/config/config';
 import { MailService } from '../common/mail/mail.service';
 import { ManagerModule } from '../manager/manager.module';
 import { SellerModule } from '../seller/seller.module';
+import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { BearerStrategy } from './bearer.strategy';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
+    UserModule,
     CommonModule,
     PassportModule.register({ defaultStrategy: 'bearer' }),
-    JwtModule.registerAsync({
-      useFactory: async () => ({
-        secret: configs.SECRET,
-        signOptions: {
-          expiresIn: '24h',
-        },
-      }),
+    JwtModule.register({
+      secret: configs.SECRET,
+      signOptions: {
+        expiresIn: '24h',
+      },
     }),
     forwardRef(() => AdminModule),
     forwardRef(() => BuyerModule),
     forwardRef(() => SellerModule),
     forwardRef(() => ManagerModule),
+    forwardRef(() => UserModule),
   ],
-  providers: [AuthService, BearerStrategy, MailService],
+  providers: [AuthService, BearerStrategy, UserService, MailService],
   exports: [AuthService],
 })
 export class AuthModule {}

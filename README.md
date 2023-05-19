@@ -128,44 +128,45 @@ Here are the methods and URLs for the project respectively ({{api}} - http://loc
 
 - Admin:
 
-| method |                              URL                               |                                      description |
-|--------|:--------------------------------------------------------------:|-------------------------------------------------:|
-| POST   |                         {{api}}/admin                          |                               Create a new admin |
-| PATCH  |                     {{api}}/admin/:idAdmin                     |                               Update a new admin |
-| GET    |                     {{api}}/admin/:idAdmin                     |                               Get an admin by ID |
-| GET    |                    {{api}}/admin/:firstName                    |                       Get an admin by first name |
-| GET    |                         {{api}}/admin                          |                             Get a list of admins |
-| DELETE |                     {{api}}/admin/:idAdmin                     |                                  Delete an admin |
-| POST   |                      {{api}}/admin/buyer                       |                      Create a new buyer by Admin |
-| PATCH  |                  {{api}}/admin/buyer/:idBuyer                  |                          Update a buyer by Admin |
-| GET    |                    {{api}}/admin/buyer/list                    |                    Get a list of buyers by Admin |
-| GET    |                  {{api}}/admin/buyer/:idBuyer                  |                       Get a buyer by ID by Admin |
-| GET    |              {{api}}/admin/buyer/name/:firstName               |               Get a buyer by first name by Admin |
-| DELETE |                 {{api}}/admin /buyer/:idBuyer                  |                          Delete a buyer by Admin |
-| POST   |                     {{api}}/admin/manager                      |                    Create a new manager by Admin |
-| PATCH  |                {{api}}/admin/manager/:idManager                |                        Update a manager by Admin |
-| GET    |                  {{api}}/admin/managers/list                   |                  Get a list of managers by Admin |
-| GET    |                {{api}}/admin/manager/:idManager                |                     Get a manager by ID by Admin |
-| GET    |             {{api}}/admin/manager/name/:firstName              |             Get a manager by first name by Admin |
-| DELETE |                {{api}}/admin/manager/:idManager                |                        Delete a manager by Admin |
-| POST   |                      {{api}}/admin/seller                      |                     Create a new seller by Admin |
-| PATCH  |                 {{api}}/admin/seller/:idSeller                 |                         Update a seller by Admin |
-| GET    |                   {{api}}/admin/sellers/list                   |                  Get a list of sellers  by Admin |
-| GET    |                 {{api}}/admin/seller/:idSeller                 |                      Get a seller by ID by Admin |
-| GET    |              {{api}}/admin/seller/name/:firstName              |              Get a seller by first name by Admin |
-| DELETE |                 {{api}}/admin/seller/:idSeller                 |                         Delete a seller by Admin |
-| POST   |             {{api}}/admin/sellerPremium/:sellerId              |               Upgrade seller to premium by Admin |
-| POST   |          {{api}}/admin/sellerPremium/:sellerId/cancel          |      Cancel seller premium subscription by Admin |
-| GET    |          {{api}}/admin/sellerPremium/:sellerId/views           | Get views count per period for a seller by Admin |
-| GET    |      {{api}}/admin/sellerPremium/:sellerId/views/:period       |                      Get a seller by ID by Admin |
-| GET    |   {{api}}/admin/sellerPremium/:sellerId/averagePrice/region    |      Get average price in seller region by Admin |
-| GET    |   {{api}}/admin/sellerPremium/:sellerId/averagePrice/ukraine   |            Get average price in Ukraine by Admin |
-| POST   |                {{api}}/admin/new/:idSeller/car                 |                        Create a new car by Admin |
-| PATCH  |        {{api}}/admin/update/seller/:idSeller/car/:idCar        |                            Update a car by Admin |
-| GET    |                     {{api}}/admin/cars/all                     |                            Get all cars by Admin |
-| GET    |               {{api}}/admin/seller/:idSeller/car               |                     Get all seller cars by Admin |
-| GET    |           {{api}}/admin/seller/:idSeller/car/:idCar            |                               Get a car by Admin |
-| DELETE |            {{api}}/admin/seller/:idSeller/car/:idCa            |                            Delete a car by Admin |
+| method |                            URL                             |                                      description |
+|--------|:----------------------------------------------------------:|-------------------------------------------------:|
+| POST   |                       {{api}}/admin                        |                               Create a new admin |
+| PATCH  |                   {{api}}/admin/:idAdmin                   |                               Update a new admin |
+| GET    |                   {{api}}/admin/:idAdmin                   |                               Get an admin by ID |
+| GET    |                  {{api}}/admin/:firstName                  |                       Get an admin by first name |
+| GET    |                       {{api}}/admin                        |                             Get a list of admins |
+| DELETE |                   {{api}}/admin/:idAdmin                   |                                  Delete an admin |
+| POST   |                    {{api}}/admin/buyer                     |                      Create a new buyer by Admin |
+| PATCH  |                {{api}}/admin/buyer/:idBuyer                |                          Update a buyer by Admin |
+| GET    |                  {{api}}/admin/buyer/list                  |                    Get a list of buyers by Admin |
+| GET    |                {{api}}/admin/buyer/:idBuyer                |                       Get a buyer by ID by Admin |
+| GET    |            {{api}}/admin/buyer/name/:firstName             |               Get a buyer by first name by Admin |
+| DELETE |               {{api}}/admin /buyer/:idBuyer                |                          Delete a buyer by Admin |
+| POST   |                   {{api}}/admin/manager                    |                    Create a new manager by Admin |
+| PATCH  |              {{api}}/admin/manager/:idManager              |                        Update a manager by Admin |
+| GET    |                {{api}}/admin/managers/list                 |                  Get a list of managers by Admin |
+| GET    |              {{api}}/admin/manager/:idManager              |                     Get a manager by ID by Admin |
+| GET    |           {{api}}/admin/manager/name/:firstName            |             Get a manager by first name by Admin |
+| DELETE |              {{api}}/admin/manager/:idManager              |                        Delete a manager by Admin |
+| POST   |                    {{api}}/admin/seller                    |                     Create a new seller by Admin |
+| PATCH  |               {{api}}/admin/seller/:idSeller               |                         Update a seller by Admin |
+| GET    |                 {{api}}/admin/sellers/list                 |                  Get a list of sellers  by Admin |
+| GET    |               {{api}}/admin/seller/:idSeller               |                      Get a seller by ID by Admin |
+| GET    |            {{api}}/admin/seller/name/:firstName            |              Get a seller by first name by Admin |
+| DELETE |               {{api}}/admin/seller/:idSeller               |                         Delete a seller by Admin |
+| POST   |           {{api}}/admin/sellerPremium/:sellerId            |               Upgrade seller to premium by Admin |
+| POST   |        {{api}}/admin/sellerPremium/:sellerId/cancel        |      Cancel seller premium subscription by Admin |
+| GET    |        {{api}}/admin/sellerPremium/:sellerId/views         | Get views count per period for a seller by Admin |
+| GET    |    {{api}}/admin/sellerPremium/:sellerId/views/:period     |                      Get a seller by ID by Admin |
+| GET    | {{api}}/admin/sellerPremium/:sellerId/averagePrice/region  |      Get average price in seller region by Admin |
+| GET    | {{api}}/admin/sellerPremium/:sellerId/averagePrice/ukraine |            Get average price in Ukraine by Admin |
+| POST   |              {{api}}/admin/new/:idSeller/car               |                        Create a new car by Admin |
+| POST   |         {{api}}/admin/another/:idSeller/car                |   Create another car for seller premium by Admin |
+| PATCH  |      {{api}}/admin/update/seller/:idSeller/car/:idCar      |                            Update a car by Admin |
+| GET    |                   {{api}}/admin/cars/all                   |                            Get all cars by Admin |
+| GET    |             {{api}}/admin/seller/:idSeller/car             |                     Get all seller cars by Admin |
+| GET    |         {{api}}/admin/seller/:idSeller/car/:idCar          |                               Get a car by Admin |
+| DELETE |          {{api}}/admin/seller/:idSeller/car/:idCa          |                            Delete a car by Admin |
 
 - Auth:
 

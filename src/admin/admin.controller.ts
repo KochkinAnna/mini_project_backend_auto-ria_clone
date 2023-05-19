@@ -83,7 +83,7 @@ export class AdminController {
     }),
   )
   async createAdmin(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Body() adminData: CreateAdminDto,
     @UploadedFile() file: Express.Multer.File,
@@ -94,7 +94,6 @@ export class AdminController {
       adminData.avatar = filePath;
     }
     return res
-      .status(HttpStatus.CREATED)
       .status(HttpStatus.CREATED)
       .json(await this.adminService.createAdmin(adminData));
   }
@@ -140,7 +139,7 @@ export class AdminController {
   @ApiParam({ name: 'firstName', required: true })
   @Get('/:firstName')
   async getAdminByFirstName(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('firstName') firstName: string,
   ): Promise<Admin> {
@@ -162,7 +161,7 @@ export class AdminController {
   @ApiOperation({ summary: 'Get a list of admins' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get()
-  async getAdminsList(@Req() reg: any, @Res() res: any): Promise<Admin[]> {
+  async getAdminsList(@Req() reg: Request, @Res() res: any): Promise<Admin[]> {
     return res
       .status(HttpStatus.OK)
       .json(await this.adminService.getAdminList());
@@ -192,7 +191,7 @@ export class AdminController {
     }),
   )
   async createBuyer(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Body() buyerData: CreateBuyerDto,
     @UploadedFile() file: Express.Multer.File,
@@ -244,7 +243,7 @@ export class AdminController {
   @ApiParam({ name: 'idBuyer', type: 'string', description: 'Buyer ID' })
   @Get('/buyer/:idBuyer')
   async getBuyerById(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idBuyer') idBuyer: string,
   ): Promise<Buyer> {
@@ -257,7 +256,7 @@ export class AdminController {
   @ApiParam({ name: 'firstName', required: true })
   @Get('/buyer/name/:firstName')
   async getBuyerByFirstName(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('firstName') firstName: string,
   ): Promise<Buyer> {
@@ -300,7 +299,7 @@ export class AdminController {
     }),
   )
   async createManager(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Body() managerData: CreateManagerDto,
     @UploadedFile() file: Express.Multer.File,
@@ -343,7 +342,7 @@ export class AdminController {
   @ApiParam({ name: 'idmManager', type: 'string', description: 'Manager ID' })
   @Get('/manager/:idManager')
   async getManagerById(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idManager') idManager: string,
   ): Promise<Manager> {
@@ -356,7 +355,7 @@ export class AdminController {
   @ApiParam({ name: 'firstName', required: true })
   @Get('/manager/name/:firstName')
   async getManagerByFirstName(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('firstName') firstName: string,
   ): Promise<Manager> {
@@ -408,7 +407,7 @@ export class AdminController {
     }),
   )
   async createSeller(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Body() sellerData: CreateSellerDto,
     @UploadedFile() file: Express.Multer.File,
@@ -451,7 +450,7 @@ export class AdminController {
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/seller/:idSeller')
   async getSellerById(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
   ): Promise<Seller> {
@@ -464,7 +463,7 @@ export class AdminController {
   @ApiParam({ name: 'firstName', required: true })
   @Get('/seller/name/:firstName')
   async getSellerByFirstName(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('firstName') firstName: string,
   ): Promise<Seller> {
@@ -486,7 +485,7 @@ export class AdminController {
   @ApiOperation({ summary: 'Get a list of sallers by Admin' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get('/sellers/list')
-  async getSellerList(@Req() reg: any, @Res() res: any): Promise<Seller[]> {
+  async getSellerList(@Req() reg: Request, @Res() res: any): Promise<Seller[]> {
     return res
       .status(HttpStatus.OK)
       .json(await this.sellerService.getSellerList());
@@ -570,7 +569,7 @@ export class AdminController {
     }),
   )
   async createCar(
-    @Req() req: any,
+    @Req() req: Request,
     @Param('idSeller') idSeller: string,
     @Body() carData: CreateCarDto,
     @Res() res: any,
@@ -585,6 +584,43 @@ export class AdminController {
     return res
       .status(HttpStatus.CREATED)
       .json(await this.sellerService.createCar(idSeller, carData));
+  }
+
+  @ApiOperation({ summary: 'Create another car for seller premium by Admin' })
+  @ApiCreatedResponse({ type: CreateCarDto })
+  @Post('/another/:idSeller/car')
+  @UseInterceptors(
+    FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
+      storage: diskStorage({
+        destination: './public',
+        filename: (req, file, cb) => {
+          const filePath = buildPath(file.originalname, 'cars');
+          cb(null, filePath);
+        },
+      }),
+    }),
+  )
+  async createAnotherCar(
+    @Req() req: Request,
+    @Param('idSeller') idSeller: string,
+    @Body() carData: CreateCarDto,
+    @Res() res: any,
+    @UploadedFile() files: { image?: MulterFile[] },
+  ): Promise<CreateCarDto> {
+    if (files?.image) {
+      const uploadedFile = files.image[0];
+      const filePath = buildPath(uploadedFile.originalname, 'cars');
+      await this.s3Service.uploadPhoto(uploadedFile, 'cars');
+      carData.image = filePath;
+    }
+    return res
+      .status(HttpStatus.CREATED)
+      .json(
+        await this.sellerPremiumService.createCarBySellerPremium(
+          idSeller,
+          carData,
+        ),
+      );
   }
 
   @ApiOperation({ summary: 'Update a car by Admin' })
@@ -619,7 +655,7 @@ export class AdminController {
   @ApiOperation({ summary: 'Get all cars by Admin' })
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/cars/all')
-  async getAllCars(@Req() req: any, @Res() res: any): Promise<Car[]> {
+  async getAllCars(@Req() req: Request, @Res() res: any): Promise<Car[]> {
     return res.status(HttpStatus.OK).json(await this.adminService.getCars());
   }
 
@@ -627,7 +663,7 @@ export class AdminController {
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/seller/:idSeller/car')
   async getCars(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
   ): Promise<Car[]> {
@@ -640,7 +676,7 @@ export class AdminController {
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/seller/:idSeller/car/:idCar')
   async getCar(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,

@@ -11,7 +11,6 @@ import {
 
 import { NoProfanity } from '../../common/decorator/noProfanity.decorator';
 import { UserRole } from '../../common/enum/user-role.enum';
-import { COMPANY_REGEX } from '../../common/regex/company.regex';
 import { FIRSTNAME_REGEX } from '../../common/regex/firstName.regex';
 import { LASTNAME_REGEX } from '../../common/regex/lastName.regex';
 import { PASSWORD_REGEX } from '../../common/regex/password.regex';

@@ -13,6 +13,8 @@ import { BuyerModule } from '../buyer/buyer.module';
 import { ManagerModule } from '../manager/manager.module';
 import { SellerModule } from '../seller/seller.module';
 import { PasswordModule } from '../password/password.module';
+import { SellerPremiumModule } from '../seller-premium/seller-premium.module';
+import { SellerPremiumService } from '../seller-premium/seller-premium.service';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { PasswordModule } from '../password/password.module';
     forwardRef(() => BuyerModule),
     forwardRef(() => ManagerModule),
     forwardRef(() => SellerModule),
+    forwardRef(() => SellerPremiumModule),
     forwardRef(() => PasswordModule),
   ],
   controllers: [S3Controller],
@@ -31,6 +34,7 @@ import { PasswordModule } from '../password/password.module';
     BuyerService,
     ManagerService,
     SellerService,
+    SellerPremiumService,
   ],
   exports: [S3Service],
 })

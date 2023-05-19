@@ -65,7 +65,7 @@ export class SellerController {
     }),
   )
   async createSeller(
-    @Req() req: any,
+    @Req() req: Request,
     @Body() sellerData: CreateSellerDto,
     @Res() res: any,
     @UploadedFile() file: Express.Multer.File,
@@ -109,7 +109,7 @@ export class SellerController {
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/:idSeller')
   async getSellerById(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
   ): Promise<Seller> {
@@ -122,7 +122,7 @@ export class SellerController {
   @ApiParam({ name: 'firstName', required: true })
   @Get('/:firstName')
   async getSellerByFirstName(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('firstName') firstName: string,
   ): Promise<Seller> {
@@ -144,7 +144,7 @@ export class SellerController {
   @ApiOperation({ summary: 'Get a list of sallers' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get()
-  async getSellerList(@Req() reg: any, @Res() res: any): Promise<Seller[]> {
+  async getSellerList(@Req() reg: Request, @Res() res: any): Promise<Seller[]> {
     return res
       .status(HttpStatus.OK)
       .json(await this.sellerService.getSellerList());
@@ -167,21 +167,26 @@ export class SellerController {
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
       storage: diskStorage({
-        destination: './public/cars',
-        filename: editFileName,
+        destination: './public',
+        filename: (req, file, cb) => {
+          const filePath = buildPath(file.originalname, 'cars');
+          cb(null, filePath);
+        },
       }),
-      fileFilter: imageFileFilter,
     }),
   )
   async createCar(
-    @Req() req: any,
+    @Req() req: Request,
     @Param('idSeller') idSeller: string,
     @Body() carData: CreateCarDto,
     @Res() res: any,
     @UploadedFile() files: { image?: Express.Multer.File[] },
   ): Promise<CreateCarDto> {
     if (files?.image) {
-      carData.image = `/public/cars/${files.image[0].filename}`;
+      const uploadedFile = files.image[0];
+      const filePath = buildPath(uploadedFile.originalname, 'cars');
+      await this.s3Service.uploadPhoto(uploadedFile, 'cars');
+      carData.image = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -194,10 +199,12 @@ export class SellerController {
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
       storage: diskStorage({
-        destination: './public/cars',
-        filename: editFileName,
+        destination: './public',
+        filename: (req, file, cb) => {
+          const filePath = buildPath(file.originalname, 'cars');
+          cb(null, filePath);
+        },
       }),
-      fileFilter: imageFileFilter,
     }),
   )
   async updateCar(
@@ -207,7 +214,10 @@ export class SellerController {
     @UploadedFile() files: { image?: Express.Multer.File[] },
   ): Promise<CreateCarDto> {
     if (files?.image) {
-      carData.image = `/public/cars/${files.image[0].filename}`;
+      const uploadedFile = files.image[0];
+      const filePath = buildPath(uploadedFile.originalname, 'cars');
+      await this.s3Service.uploadPhoto(uploadedFile, 'cars');
+      carData.image = filePath;
     }
     return this.sellerService.updateCar(idSeller, idCar, carData);
   }
@@ -216,7 +226,7 @@ export class SellerController {
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/:idSeller/car')
   async getCars(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
   ): Promise<Car[]> {
@@ -229,7 +239,7 @@ export class SellerController {
   @ApiParam({ name: 'idSeller', type: 'string', description: 'Seller ID' })
   @Get('/:idSeller/car/:idCar')
   async getCar(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,

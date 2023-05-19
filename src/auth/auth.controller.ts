@@ -1,8 +1,9 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 
 import { MailTemplate } from '../common/mail/mail.interface';
 import { MailService } from '../common/mail/mail.service';
+import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 
@@ -11,65 +12,63 @@ import { LoginDto, RegisterDto } from './dto/auth.dto';
 export class AuthController {
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private mailService: MailService,
   ) {}
 
-  @ApiOperation({ summary: 'Login user' })
-  @ApiOkResponse({ type: LoginDto })
   @Post('login')
   async login(@Res() res: any, @Body() body: LoginDto) {
-    if (!body.email || !body.password) {
+    if (!body.email && !body.password) {
       return res
         .status(HttpStatus.FORBIDDEN)
         .json({ message: 'Error.Check_request_params' });
     }
-
-    const user = await this.authService.login(body.email, body.password);
-
-    if (!user) {
+    const findUser = await this.userService.findUserByEmail(body.email);
+    if (!findUser) {
       return res
         .status(HttpStatus.UNAUTHORIZED)
         .json({ message: 'Email or password is incorrect' });
     }
-
-    const token = await this.authService.signIn(user);
-    return res.status(HttpStatus.OK).json({ token });
+    if (await this.authService.compareHash(body.password, findUser.password)) {
+      const token = await this.authService.singIn(findUser.id.toString());
+      return res.status(HttpStatus.OK).json({ token });
+    }
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: 'Email or password is incorrect' });
   }
 
-  @ApiOperation({ summary: 'Register user' })
-  @ApiOkResponse({ type: RegisterDto })
   @Post('register')
   async registerUser(@Res() res: any, @Body() body: RegisterDto) {
+    let findUser;
     try {
-      const existingUser = await this.authService.findUserByEmail(
-        body.email.trim(),
-      );
-      if (existingUser) {
-        return res
-          .status(HttpStatus.FORBIDDEN)
-          .json({ message: 'User with this email already exists' });
-      }
+      findUser = await this.userService.findUserByEmail(body.email.trim());
+    } catch (err) {
+      console.log(err);
+    }
+    if (findUser) {
+      return res
+        .status(HttpStatus.FORBIDDEN)
+        .json({ message: 'User with this email is already exist' });
+    }
+    const user = await this.userService.createUser(body.role, {
+      firstName: body.firstName ? body.firstName : 'User',
+      email: body.email,
+      password: body.password,
+      phoneNumber: body.phoneNumber,
+    });
 
-      const user = await this.authService.register(body);
-
-      if (!user) {
-        return res
-          .status(HttpStatus.BAD_REQUEST)
-          .json({ message: 'Error.Register_user_failed' });
-      }
-
+    if (user) {
       const subject = 'Welcome on board!';
       this.mailService.send(user.email, subject, MailTemplate.WELCOME, {
         userName: user.firstName,
       });
-
-      const token = await this.authService.signIn(user.id.toString());
+      const token = await this.authService.singIn(user.id.toString());
       return res.status(HttpStatus.OK).json({ token });
-    } catch (err) {
-      console.log(err);
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .json({ message: 'Error.Register_user_failed' });
     }
+
+    return res
+      .status(HttpStatus.BAD_REQUEST)
+      .json({ message: 'Error.Register_user_failed' });
   }
 }

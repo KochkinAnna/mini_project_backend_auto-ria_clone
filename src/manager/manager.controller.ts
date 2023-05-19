@@ -58,7 +58,7 @@ export class ManagerController {
     }),
   )
   async createManager(
-    @Req() req: any,
+    @Req() req: Request,
     @Body() managerData: CreateManagerDto,
     @Res() res: any,
     @UploadedFile() file: Express.Multer.File,
@@ -102,7 +102,7 @@ export class ManagerController {
   @ApiParam({ name: 'idmManager', type: 'string', description: 'Manager ID' })
   @Get('/:idManager')
   async getManagerById(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idManager') idManager: string,
   ): Promise<Manager> {
@@ -137,7 +137,7 @@ export class ManagerController {
   @ApiOperation({ summary: 'Get a list of managers' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get()
-  async getManagerList(@Req() reg: any, @Res() res: any): Promise<Manager[]> {
+  async getManagerList(@Req() reg: Request, @Res() res: any): Promise<Manager[]> {
     return res
       .status(HttpStatus.OK)
       .json(await this.managerService.getManagerList());

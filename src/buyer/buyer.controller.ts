@@ -58,7 +58,7 @@ export class BuyerController {
     }),
   )
   async createBuyer(
-    @Req() req: any,
+    @Req() req: Request,
     @Body() buyerData: CreateBuyerDto,
     @Res() res: any,
     @UploadedFile() file: Express.Multer.File,
@@ -102,7 +102,7 @@ export class BuyerController {
   @ApiParam({ name: 'idBuyer', type: 'string', description: 'Buyer ID' })
   @Get('/:idBuyer')
   async getBuyerById(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('idBuyer') idBuyer: string,
   ): Promise<Buyer> {
@@ -115,7 +115,7 @@ export class BuyerController {
   @ApiParam({ name: 'firstName', required: true })
   @Get('/:firstName')
   async getBuyerByFirstName(
-    @Req() req: any,
+    @Req() req: Request,
     @Res() res: any,
     @Param('firstName') firstName: string,
   ): Promise<Buyer> {
@@ -137,7 +137,7 @@ export class BuyerController {
   @ApiOperation({ summary: 'Get a list of buyers' })
   @ApiResponse({ status: HttpStatus.OK })
   @Get()
-  async getBuyerList(@Req() reg: any, @Res() res: any): Promise<Buyer[]> {
+  async getBuyerList(@Req() reg: Request, @Res() res: any): Promise<Buyer[]> {
     return res
       .status(HttpStatus.OK)
       .json(await this.buyerService.getBuyerList());

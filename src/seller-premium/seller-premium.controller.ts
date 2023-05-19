@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  forwardRef,
   Get,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Req,
@@ -10,7 +12,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import {
   ApiCreatedResponse,
   ApiOperation,
@@ -21,16 +23,19 @@ import { diskStorage } from 'multer';
 
 import CreateCarDto from '../car/dto/createCar.dto';
 import { Period } from '../common/enum/views-period.enum';
-import {
-  editFileName,
-  imageFileFilter,
-} from '../common/file-upload/file.upload';
+import { buildPath } from '../common/helpers/helpers';
+import { MulterFile } from '../common/interface/multer-file.interface';
+import { S3Service } from '../s3/s3.service';
 import { SellerPremiumService } from './seller-premium.service';
 
 @ApiTags('Seller Premium')
 @Controller('sellerPremium')
 export class SellerPremiumController {
-  constructor(private readonly sellerPremiumService: SellerPremiumService) {}
+  constructor(
+    private readonly sellerPremiumService: SellerPremiumService,
+    @Inject(forwardRef(() => S3Service))
+    private readonly s3Service: S3Service,
+  ) {}
 
   @ApiOperation({ summary: 'Upgrade seller to premium' })
   @ApiParam({ name: 'sellerId', required: true })
@@ -46,27 +51,32 @@ export class SellerPremiumController {
     await this.sellerPremiumService.cancelPremium(sellerId);
   }
 
-  @ApiOperation({ summary: 'Create a new car by seller premium' })
+  @ApiOperation({ summary: 'Create another car by seller premium' })
   @ApiCreatedResponse({ type: CreateCarDto })
   @Post('/another/:idSeller/car')
   @UseInterceptors(
-    FileInterceptor('file', {
+    FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
       storage: diskStorage({
         destination: './public',
-        filename: editFileName,
+        filename: (req, file, cb) => {
+          const filePath = buildPath(file.originalname, 'cars');
+          cb(null, filePath);
+        },
       }),
-      fileFilter: imageFileFilter,
     }),
   )
-  async createCar(
-    @Req() req: any,
+  async createAnotherCar(
+    @Req() req: Request,
     @Param('idSeller') idSeller: string,
     @Body() carData: CreateCarDto,
     @Res() res: any,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile() files: { image?: MulterFile[] },
   ): Promise<CreateCarDto> {
-    if (file) {
-      carData.image = `public/${file.filename}`;
+    if (files?.image) {
+      const uploadedFile = files.image[0];
+      const filePath = buildPath(uploadedFile.originalname, 'cars');
+      await this.s3Service.uploadPhoto(uploadedFile, 'cars');
+      carData.image = filePath;
     }
     return res
       .status(HttpStatus.CREATED)

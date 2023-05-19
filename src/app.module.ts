@@ -29,6 +29,7 @@ import { CardealershipSalesModule } from './cardealership-sales/cardealership-sa
 import { CardealershipSalesService } from './cardealership-sales/cardealership-sales.service';
 import { CardealershipServiceManagerController } from './cardealership-service-manager/cardealership-service-manager.controller';
 import { CardealershipServiceManagerModule } from './cardealership-service-manager/cardealership-service-manager.module';
+import { MailModule } from './common/mail/mail.module';
 import { MailService } from './common/mail/mail.service';
 import { PrismaModule } from './common/orm/prisma.module';
 import { PrismaService } from './common/orm/prisma.service';
@@ -38,15 +39,18 @@ import { ManagerService } from './manager/manager.service';
 import { PasswordController } from './password/password.controller';
 import { PasswordModule } from './password/password.module';
 import { PasswordService } from './password/password.service';
+import { S3Controller } from './s3/s3.controller';
+import { S3Module } from './s3/s3.module';
+import { S3Service } from './s3/s3.service';
 import { SellerController } from './seller/seller.controller';
 import { SellerModule } from './seller/seller.module';
 import { SellerService } from './seller/seller.service';
 import { SellerPremiumController } from './seller-premium/seller-premium.controller';
 import { SellerPremiumModule } from './seller-premium/seller-premium.module';
 import { SellerPremiumService } from './seller-premium/seller-premium.service';
-import { S3Service } from './s3/s3.service';
-import { S3Module } from './s3/s3.module';
-import { S3Controller } from './s3/s3.controller';
+import { UserModule } from './user/user.module';
+import { UserService } from './user/user.service';
+import { PassportWrapperModule } from './auth/passport-wrapper.module';
 
 @Module({
   imports: [
@@ -59,12 +63,15 @@ import { S3Controller } from './s3/s3.controller';
     CardealershipMechanicModule,
     CardealershipSalesModule,
     CardealershipServiceManagerModule,
+    MailModule,
     ManagerModule,
     PasswordModule,
+    PassportWrapperModule,
     PrismaModule,
     S3Module,
     SellerModule,
     SellerPremiumModule,
+    UserModule,
   ],
   controllers: [
     AppController,
@@ -101,6 +108,7 @@ import { S3Controller } from './s3/s3.controller';
     SellerService,
     SellerPremiumService,
     S3Service,
+    UserService,
   ],
 })
 export class AppModule {}
