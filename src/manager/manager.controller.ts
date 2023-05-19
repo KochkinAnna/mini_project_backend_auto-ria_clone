@@ -2,8 +2,10 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
   HttpStatus,
+  Inject,
   NotFoundException,
   Param,
   Patch,
@@ -28,6 +30,8 @@ import {
   editFileName,
   imageFileFilter,
 } from '../common/file-upload/file.upload';
+import { buildPath } from '../common/helpers/helpers';
+import { S3Service } from '../s3/s3.service';
 import { CreateManagerDto } from './dto/createManager.dto';
 import { UpdateManagerDto } from './dto/updateManager.dto';
 import { ManagerService } from './manager.service';
@@ -35,7 +39,11 @@ import { ManagerService } from './manager.service';
 @ApiTags('Manager')
 @Controller('manager')
 export class ManagerController {
-  constructor(private readonly managerService: ManagerService) {}
+  constructor(
+    private readonly managerService: ManagerService,
+    @Inject(forwardRef(() => S3Service))
+    private readonly s3Service: S3Service,
+  ) {}
 
   @ApiOperation({ summary: 'Create a new manager' })
   @ApiOkResponse({ type: CreateManagerDto })
@@ -56,7 +64,9 @@ export class ManagerController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateManagerDto> {
     if (file) {
-      managerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'manager');
+      await this.s3Service.uploadPhoto(file, filePath);
+      managerData.avatar = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -81,7 +91,9 @@ export class ManagerController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Manager> {
     if (file) {
-      managerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'manager');
+      await this.s3Service.uploadPhoto(file, filePath);
+      managerData.avatar = filePath;
     }
     return this.managerService.updateManager(idManager, managerData);
   }

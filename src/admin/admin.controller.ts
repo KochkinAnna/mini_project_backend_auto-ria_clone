@@ -21,7 +21,6 @@ import {
 } from '@nestjs/platform-express';
 import {
   ApiCreatedResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiResponse,
@@ -40,9 +39,12 @@ import {
   editFileName,
   imageFileFilter,
 } from '../common/file-upload/file.upload';
+import { buildPath } from '../common/helpers/helpers';
+import { MulterFile } from '../common/interface/multer-file.interface';
 import { CreateManagerDto } from '../manager/dto/createManager.dto';
 import { UpdateManagerDto } from '../manager/dto/updateManager.dto';
 import { ManagerService } from '../manager/manager.service';
+import { S3Service } from '../s3/s3.service';
 import CreateSellerDto from '../seller/dto/createSeller.dto';
 import UpdateSellerDto from '../seller/dto/updateSeller.dto';
 import { SellerService } from '../seller/seller.service';
@@ -64,11 +66,12 @@ export class AdminController {
     private readonly sellerService: SellerService,
     @Inject(forwardRef(() => SellerPremiumService))
     private readonly sellerPremiumService: SellerPremiumService,
+    @Inject(forwardRef(() => S3Service))
+    private readonly s3Service: S3Service,
   ) {}
 
   //Admin
   @ApiOperation({ summary: 'Create a new admin' })
-  @ApiOkResponse({ type: CreateAdminDto })
   @Post()
   @UseInterceptors(
     FileInterceptor('file', {
@@ -81,20 +84,22 @@ export class AdminController {
   )
   async createAdmin(
     @Req() req: any,
-    @Body() adminData: CreateAdminDto,
     @Res() res: any,
+    @Body() adminData: CreateAdminDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Admin> {
     if (file) {
-      adminData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'admin');
+      await this.s3Service.uploadPhoto(file, filePath);
+      adminData.avatar = filePath;
     }
     return res
+      .status(HttpStatus.CREATED)
       .status(HttpStatus.CREATED)
       .json(await this.adminService.createAdmin(adminData));
   }
 
   @ApiOperation({ summary: 'Update an admin' })
-  @ApiParam({ name: 'idAdmin', required: true })
   @Patch('/:idAdmin')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -111,7 +116,9 @@ export class AdminController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Admin> {
     if (file) {
-      adminData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'admin');
+      await this.s3Service.uploadPhoto(file, filePath);
+      adminData.avatar = filePath;
     }
     return this.adminService.updateAdmin(idAdmin, adminData);
   }
@@ -174,7 +181,6 @@ export class AdminController {
 
   //Buyer
   @ApiOperation({ summary: 'Create a new buyer by Admin' })
-  @ApiOkResponse({ type: CreateBuyerDto })
   @Post('/buyer')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -187,12 +193,14 @@ export class AdminController {
   )
   async createBuyer(
     @Req() req: any,
-    @Body() buyerData: CreateBuyerDto,
     @Res() res: any,
+    @Body() buyerData: CreateBuyerDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateBuyerDto> {
     if (file) {
-      buyerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'buyer');
+      await this.s3Service.uploadPhoto(file, filePath);
+      buyerData.avatar = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -200,7 +208,6 @@ export class AdminController {
   }
 
   @ApiOperation({ summary: 'Update a buyer by Admin' })
-  @ApiParam({ name: 'idBuyer', required: true })
   @Patch('/buyer/:idBuyer')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -217,7 +224,9 @@ export class AdminController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Buyer> {
     if (file) {
-      buyerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'buyer');
+      await this.s3Service.uploadPhoto(file, filePath);
+      buyerData.avatar = filePath;
     }
     return this.buyerService.updateBuyer(idBuyer, buyerData);
   }
@@ -278,9 +287,8 @@ export class AdminController {
     res.sendStatus(HttpStatus.OK);
   }
 
-  //Manager
+  // Manager
   @ApiOperation({ summary: 'Create a new manager by Admin' })
-  @ApiOkResponse({ type: CreateManagerDto })
   @Post('/manager')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -293,12 +301,14 @@ export class AdminController {
   )
   async createManager(
     @Req() req: any,
-    @Body() managerData: CreateManagerDto,
     @Res() res: any,
+    @Body() managerData: CreateManagerDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateManagerDto> {
     if (file) {
-      managerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'manager');
+      await this.s3Service.uploadPhoto(file, filePath);
+      managerData.avatar = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -306,7 +316,6 @@ export class AdminController {
   }
 
   @ApiOperation({ summary: 'Update a manager by Admin' })
-  @ApiParam({ name: 'idManager', required: true })
   @Patch('/manager/:idManager')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -323,7 +332,9 @@ export class AdminController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Manager> {
     if (file) {
-      managerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'manager');
+      await this.s3Service.uploadPhoto(file, filePath);
+      managerData.avatar = filePath;
     }
     return this.managerService.updateManager(idManager, managerData);
   }
@@ -384,9 +395,8 @@ export class AdminController {
     res.sendStatus(HttpStatus.OK);
   }
 
-  //Seller
+  // Seller
   @ApiOperation({ summary: 'Create a new seller by Admin' })
-  @ApiOkResponse({ type: CreateSellerDto })
   @Post('seller')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -399,12 +409,14 @@ export class AdminController {
   )
   async createSeller(
     @Req() req: any,
-    @Body() sellerData: CreateSellerDto,
     @Res() res: any,
+    @Body() sellerData: CreateSellerDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateSellerDto> {
     if (file) {
-      sellerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'seller');
+      await this.s3Service.uploadPhoto(file, filePath);
+      sellerData.avatar = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -412,7 +424,6 @@ export class AdminController {
   }
 
   @ApiOperation({ summary: 'Update a seller by Admin' })
-  @ApiParam({ name: 'idSeller', required: true })
   @Patch('/seller/:idSeller')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -429,7 +440,9 @@ export class AdminController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Seller> {
     if (file) {
-      sellerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'seller');
+      await this.s3Service.uploadPhoto(file, filePath);
+      sellerData.avatar = filePath;
     }
     return this.sellerService.updateSeller(idSeller, sellerData);
   }
@@ -548,10 +561,12 @@ export class AdminController {
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
       storage: diskStorage({
-        destination: './public/cars',
-        filename: editFileName,
+        destination: './public',
+        filename: (req, file, cb) => {
+          const filePath = buildPath(file.originalname, 'cars');
+          cb(null, filePath);
+        },
       }),
-      fileFilter: imageFileFilter,
     }),
   )
   async createCar(
@@ -559,10 +574,13 @@ export class AdminController {
     @Param('idSeller') idSeller: string,
     @Body() carData: CreateCarDto,
     @Res() res: any,
-    @UploadedFile() files: { image?: Express.Multer.File[] },
+    @UploadedFile() files: { image?: MulterFile[] },
   ): Promise<CreateCarDto> {
     if (files?.image) {
-      carData.image = `/public/cars/${files.image[0].filename}`;
+      const uploadedFile = files.image[0];
+      const filePath = buildPath(uploadedFile.originalname, 'cars');
+      await this.s3Service.uploadPhoto(uploadedFile, 'cars');
+      carData.image = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -575,20 +593,25 @@ export class AdminController {
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'image', maxCount: 8 }], {
       storage: diskStorage({
-        destination: './public/cars',
-        filename: editFileName,
+        destination: './public',
+        filename: (req, file, cb) => {
+          const filePath = buildPath(file.originalname, 'cars');
+          cb(null, filePath);
+        },
       }),
-      fileFilter: imageFileFilter,
     }),
   )
   async updateCar(
     @Param('idSeller') idSeller: string,
     @Param('idCar') idCar: string,
     @Body() carData: UpdateCarDto,
-    @UploadedFile() files: { image?: Express.Multer.File[] },
+    @UploadedFile() files: { image?: MulterFile[] },
   ): Promise<CreateCarDto> {
     if (files?.image) {
-      carData.image = `/public/cars/${files.image[0].filename}`;
+      const uploadedFile = files.image[0];
+      const filePath = buildPath(uploadedFile.originalname, 'cars');
+      await this.s3Service.uploadPhoto(uploadedFile, 'cars');
+      carData.image = filePath;
     }
     return this.sellerService.updateCar(idSeller, idCar, carData);
   }

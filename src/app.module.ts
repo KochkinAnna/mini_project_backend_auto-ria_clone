@@ -44,6 +44,9 @@ import { SellerService } from './seller/seller.service';
 import { SellerPremiumController } from './seller-premium/seller-premium.controller';
 import { SellerPremiumModule } from './seller-premium/seller-premium.module';
 import { SellerPremiumService } from './seller-premium/seller-premium.service';
+import { S3Service } from './s3/s3.service';
+import { S3Module } from './s3/s3.module';
+import { S3Controller } from './s3/s3.controller';
 
 @Module({
   imports: [
@@ -59,9 +62,9 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     ManagerModule,
     PasswordModule,
     PrismaModule,
+    S3Module,
     SellerModule,
     SellerPremiumModule,
-    PasswordModule,
   ],
   controllers: [
     AppController,
@@ -76,6 +79,7 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     CardealershipServiceManagerController,
     ManagerController,
     PasswordController,
+    S3Controller,
     SellerController,
     SellerPremiumController,
   ],
@@ -96,7 +100,7 @@ import { SellerPremiumService } from './seller-premium/seller-premium.service';
     PrismaService,
     SellerService,
     SellerPremiumService,
-    PasswordService,
+    S3Service,
   ],
 })
 export class AppModule {}

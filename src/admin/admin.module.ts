@@ -14,6 +14,8 @@ import { SellerPremiumModule } from '../seller-premium/seller-premium.module';
 import { SellerPremiumService } from '../seller-premium/seller-premium.service';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
+import { S3Service } from '../s3/s3.service';
+import { S3Module } from '../s3/s3.module';
 
 @Module({
   imports: [
@@ -23,6 +25,7 @@ import { AdminService } from './admin.service';
     forwardRef(() => SellerModule),
     forwardRef(() => SellerPremiumModule),
     forwardRef(() => PasswordModule),
+    forwardRef(() => S3Module),
   ],
   controllers: [AdminController],
   providers: [
@@ -31,6 +34,7 @@ import { AdminService } from './admin.service';
     BuyerService,
     ManagerService,
     PasswordService,
+    S3Service,
     SellerService,
     SellerPremiumService,
   ],

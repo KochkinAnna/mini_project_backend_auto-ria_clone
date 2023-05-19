@@ -2,8 +2,10 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
   HttpStatus,
+  Inject,
   NotFoundException,
   Param,
   Patch,
@@ -35,6 +37,8 @@ import {
   editFileName,
   imageFileFilter,
 } from '../common/file-upload/file.upload';
+import { buildPath } from '../common/helpers/helpers';
+import { S3Service } from '../s3/s3.service';
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
 import { SellerService } from './seller.service';
@@ -42,7 +46,11 @@ import { SellerService } from './seller.service';
 @ApiTags('Seller')
 @Controller('seller')
 export class SellerController {
-  constructor(private readonly sellerService: SellerService) {}
+  constructor(
+    private readonly sellerService: SellerService,
+    @Inject(forwardRef(() => S3Service))
+    private readonly s3Service: S3Service,
+  ) {}
 
   @ApiOperation({ summary: 'Create a new seller' })
   @ApiOkResponse({ type: CreateSellerDto })
@@ -63,7 +71,9 @@ export class SellerController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateSellerDto> {
     if (file) {
-      sellerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'seller');
+      await this.s3Service.uploadPhoto(file, filePath);
+      sellerData.avatar = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -88,7 +98,9 @@ export class SellerController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Seller> {
     if (file) {
-      sellerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'seller');
+      await this.s3Service.uploadPhoto(file, filePath);
+      sellerData.avatar = filePath;
     }
     return this.sellerService.updateSeller(idSeller, sellerData);
   }

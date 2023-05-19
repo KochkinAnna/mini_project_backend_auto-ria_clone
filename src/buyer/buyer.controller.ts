@@ -2,8 +2,10 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
   HttpStatus,
+  Inject,
   NotFoundException,
   Param,
   Patch,
@@ -28,6 +30,8 @@ import {
   editFileName,
   imageFileFilter,
 } from '../common/file-upload/file.upload';
+import { buildPath } from '../common/helpers/helpers';
+import { S3Service } from '../s3/s3.service';
 import { BuyerService } from './buyer.service';
 import { CreateBuyerDto } from './dto/createBuyer.dto';
 import { UpdateBuyerDto } from './dto/updateBuyer.dto';
@@ -35,7 +39,11 @@ import { UpdateBuyerDto } from './dto/updateBuyer.dto';
 @ApiTags('Buyer')
 @Controller('buyer')
 export class BuyerController {
-  constructor(private readonly buyerService: BuyerService) {}
+  constructor(
+    private readonly buyerService: BuyerService,
+    @Inject(forwardRef(() => S3Service))
+    private readonly s3Service: S3Service,
+  ) {}
 
   @ApiOperation({ summary: 'Create a new buyer' })
   @ApiOkResponse({ type: CreateBuyerDto })
@@ -56,7 +64,9 @@ export class BuyerController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateBuyerDto> {
     if (file) {
-      buyerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'buyer');
+      await this.s3Service.uploadPhoto(file, filePath);
+      buyerData.avatar = filePath;
     }
     return res
       .status(HttpStatus.CREATED)
@@ -81,7 +91,9 @@ export class BuyerController {
     @UploadedFile() file: Express.Multer.File,
   ): Promise<Buyer> {
     if (file) {
-      buyerData.avatar = `public/${file.filename}`;
+      const filePath = buildPath(file.filename, 'buyer');
+      await this.s3Service.uploadPhoto(file, filePath);
+      buyerData.avatar = filePath;
     }
     return this.buyerService.updateBuyer(idBuyer, buyerData);
   }
