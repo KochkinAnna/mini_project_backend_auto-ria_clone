@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://i.pinimg.com/564x/b9/04/e6/b904e60f9c02d8afeb4b768164826c59.jpg" width="500" alt="Company Logo" />
+  <a href="http://localhost:3000/api/doc#/" target="blank"><img src="https://i.pinimg.com/564x/b9/04/e6/b904e60f9c02d8afeb4b768164826c59.jpg" width="500" alt="Company Logo" /></a>
 </p>
 
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
