@@ -1,3 +1,4 @@
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
@@ -9,6 +10,7 @@ import { AppService } from './app.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { AuthService } from './auth/auth.service';
+import { PassportWrapperModule } from './auth/passport-wrapper.module';
 import { BuyerController } from './buyer/buyer.controller';
 import { BuyerModule } from './buyer/buyer.module';
 import { BuyerService } from './buyer/buyer.service';
@@ -33,6 +35,8 @@ import { MailModule } from './common/mail/mail.module';
 import { MailService } from './common/mail/mail.service';
 import { PrismaModule } from './common/orm/prisma.module';
 import { PrismaService } from './common/orm/prisma.service';
+import { CurrencyModule } from './currency/currency.module';
+import { CurrencyService } from './currency/currency.service';
 import { ManagerController } from './manager/manager.controller';
 import { ManagerModule } from './manager/manager.module';
 import { ManagerService } from './manager/manager.service';
@@ -50,7 +54,6 @@ import { SellerPremiumModule } from './seller-premium/seller-premium.module';
 import { SellerPremiumService } from './seller-premium/seller-premium.service';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
-import { PassportWrapperModule } from './auth/passport-wrapper.module';
 
 @Module({
   imports: [
@@ -63,6 +66,8 @@ import { PassportWrapperModule } from './auth/passport-wrapper.module';
     CardealershipMechanicModule,
     CardealershipSalesModule,
     CardealershipServiceManagerModule,
+    CurrencyModule,
+    HttpModule,
     MailModule,
     ManagerModule,
     PasswordModule,
@@ -101,6 +106,7 @@ import { PassportWrapperModule } from './auth/passport-wrapper.module';
     CardealershipManagerService,
     CardealershipMechanicService,
     CardealershipSalesService,
+    CurrencyService,
     MailService,
     ManagerService,
     PasswordService,

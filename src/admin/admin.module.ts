@@ -16,9 +16,13 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { S3Service } from '../s3/s3.service';
 import { S3Module } from '../s3/s3.module';
+import { CurrencyModule } from '../currency/currency.module';
+import { CurrencyService } from '../currency/currency.service';
+import { HttpModule, HttpService } from '@nestjs/axios';
 
 @Module({
   imports: [
+    HttpModule,
     PrismaModule,
     forwardRef(() => BuyerModule),
     forwardRef(() => ManagerModule),
@@ -26,6 +30,7 @@ import { S3Module } from '../s3/s3.module';
     forwardRef(() => SellerPremiumModule),
     forwardRef(() => PasswordModule),
     forwardRef(() => S3Module),
+    forwardRef(() => CurrencyModule),
   ],
   controllers: [AdminController],
   providers: [
@@ -37,6 +42,7 @@ import { S3Module } from '../s3/s3.module';
     S3Service,
     SellerService,
     SellerPremiumService,
+    CurrencyService,
   ],
   exports: [AdminService],
 })

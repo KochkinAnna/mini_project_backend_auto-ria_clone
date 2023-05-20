@@ -188,9 +188,11 @@ export class SellerController {
       await this.s3Service.uploadPhoto(uploadedFile, 'cars');
       carData.image = filePath;
     }
-    return res
-      .status(HttpStatus.CREATED)
-      .json(await this.sellerService.createCar(idSeller, carData));
+
+    // Викликаємо createCar метод з використанням CurrencyService
+    const createdCar = await this.sellerService.createCar(idSeller, carData);
+
+    return res.status(HttpStatus.CREATED).json(createdCar);
   }
 
   @ApiOperation({ summary: 'Update a car by seller' })

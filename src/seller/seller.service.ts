@@ -5,6 +5,7 @@ import CreateCarDto from '../car/dto/createCar.dto';
 import UpdateCarDto from '../car/dto/updateCar.dto';
 import { PrismaService } from '../common/orm/prisma.service';
 import { Currency } from '../common/type/currancy.type';
+import { CurrencyService } from '../currency/currency.service';
 import { PasswordService } from '../password/password.service';
 import CreateSellerDto from './dto/createSeller.dto';
 import UpdateSellerDto from './dto/updateSeller.dto';
@@ -14,6 +15,7 @@ export class SellerService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly passwordService: PasswordService,
+    private readonly currencyService: CurrencyService,
   ) {}
 
   async createSeller(sellerData: CreateSellerDto): Promise<Seller> {
@@ -157,6 +159,19 @@ export class SellerService {
       throw new Error('An ordinary seller can have only one car');
     }
 
+    const baseCurrency = carData.currency.toUpperCase();
+    const targetCurrency = 'UAH';
+
+    const exchangeRate = await this.currencyService.getExchangeRate(
+      baseCurrency,
+      targetCurrency,
+    );
+
+    let priceInUAH = carData.price;
+    if (carData.currency !== 'UAH') {
+      priceInUAH /= exchangeRate;
+    }
+
     const car = await this.prismaService.car.create({
       data: {
         brand: carData.brand,
@@ -164,8 +179,8 @@ export class SellerService {
         year: carData.year,
         region: carData.region,
         mileage: carData.mileage,
-        price: carData.price,
-        currency: carData.currency as Currency,
+        price: priceInUAH,
+        currency: 'UAH',
         description: carData.description,
         image: carData.image,
         seller: {
